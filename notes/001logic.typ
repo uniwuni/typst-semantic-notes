@@ -269,7 +269,8 @@ Until now we have only covered a fairly small fragment of propositional logic, e
   / Truth values and #n[negation]: $neg tru iff fls, neg fls iff tru$, <not.true-false>
   / Absurdity: $neg (rP conj neg rP)$, <conj.absurd>  
   / Converse implications: $(rP imp rQ) imp neg rQ imp neg rP$, <imp.converse1>
-  / #n[Negation] respects equivalence: $(rP iff rQ) imp (neg rP iff neg rQ)$ <not.congr>
+  / #n[Negation] respects equivalence: $(rP iff rQ) imp (neg rP iff neg rQ)$, <not.congr>
+  / Double #n[negation]: $rP imp neg neg rP$. <not.not-of>
 ]
 #proof[
   + By definition of $fls$.
@@ -295,4 +296,39 @@ Until now we have only covered a fairly small fragment of propositional logic, e
   + Assume $rP and neg rP$. Then we have $rP, neg rP$, but $neg rP #justify(<not>,iff) (rP imp fls)$, hence by #n[modus ponens], $fls$ holds.
   + Rewrite $neg rP$ to#justifyt(<not>) $rP imp fls$, $neg rQ$ to $rQ imp fls$. Then, this follows from #lk(<imp.trans>)[transitivity of implications].
   + Assume $rP iff rQ$. To show $neg rP imp neg rQ$, apply #lk(<imp.converse1>)[the previous statement] to $rP imp rQ$, and similarly for the other direction.
+  + Assume $rP$. We need#justifyt(<not>) to prove $(rP imp fls) imp fls$, so furthermore assume $rP imp fls$, but then we are done by applying #n[modus ponens].
+]
+=== Excluded middle
+#axiom(title: "Law of the excluded middle")[
+  Let $dv(P)$ be a #n[proposition]. Then, $rP disj neg rP$ always holds.
+]<excluded-middle>
+This axiom has rather far reaching consequences in that, unlike the other rules utilized so far, it has no direct computational analogue and serves as an "oracle". Without it, we would be limited to _intutionistic_ propositional logic n so on n so forth.
+
+#names(<excluded-middle>, "excluded middle", "LEM", "law of the excluded middle")
+
+#proposition(title: "Consequences of classical logic")[
+  Let $dv(P), dv(Q)$ be #n[propositions]. Then, the following #n[hold]:
+  / Double #n[negation] collapse: $rP iff neg neg rP$ <not.not-iff>,
+  / Converses: $(rP imp rQ) iff (neg rQ imp neg rP)$ <imp.converse>,
+  / Proof by contradiction: $(neg rP imp rP) imp rP$ <not.contradiction>,
+  / Discreteness of #n[propositions]: $(rP iff tru) disj (rP iff fls)$ <propositions-discrete>.
+]
+#proof[
+  + One direction has #lk(<not.not-of>)[already been shown]. For $neg neg rP imp rP$, use #n[excluded middle] and consider the cases $rP, neg rP$:
+    If $rP$ holds, we are done. If $neg P$ holds, then so does $fls$ by #n[modus ponens], hence $P$ does, too#justifyt(<false.elim>).
+  + One direction has #lk(<imp.converse1>)[already been shown]. Now assume $neg rQ imp neg rP$. By the #lk(<imp.converse1>)[proven direction], we can see that $neg neg rP imp neg neg rQ$. Rewrite to $rP imp rQ$#justifyt(<not.not-iff>)#justifyt(<imp.congr>).
+  + We #n[equivalently]#justifyt(<not.not-iff>)#justifyt(<imp.congr>) show $(neg rP imp rP) imp neg neg rP$. Assume $neg rP imp rP, neg rP$. Then, by #n[modus ponens], $rP$ follows, which is #n[absurd]#justifyt(<conj.absurd>).
+  + Rewrite to $rP disj neg rP$#justifyt(<iff.true>)#justifyt(<iff.false>) and use #n[excluded middle].
+]
+#remark(title: [Truth tables])[
+  The #lk(<propositions-discrete>)[discreteness property] allows us to check validity of #n[statements] (in some variables) very easily (though the method is computationally expensive): just enumerate all the possible cases. For example, we wish to check whether for all propositions $dv(P), dv(Q)$, $neg rP imp ((rP disj rQ) iff (rP conj rQ))$ is a #n[tautology], so let us consider a table:
+  #table(
+    columns: 7,
+    $dv(P)$, $dv(Q)$, $neg rP$, $rP disj rQ$, $rP conj rQ$, $(rP disj rQ) iff (rP conj rQ)$, $neg rP imp (rP disj rQ) iff (rP conj rQ)$,
+    $fls$, $fls$, $tru$, $fls$, $fls$, $tru$, $tru$,
+    $fls$, $tru$, $tru$, $tru$, $fls$, $fls$, $fls$,
+    $tru$, $fls$, $fls$, $tru$, $fls$, $tru$, $tru$,
+    $tru$, $tru$, $fls$, $tru$, $tru$, $tru$, $tru$
+  )
+  We can see that this #n[statement] is true unless $rP$ is #n[false] and $rQ$ is #n[true] and in particular, it is not tautological.
 ]
