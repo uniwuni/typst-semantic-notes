@@ -91,7 +91,7 @@
 #definition(title: "Logical equivalence")[
   Let $dv(P), dv(Q)$ be #n[propositions]. Then, the #n[proposition] given by the #def(<iff>)[equivalence] $rP arrow.l.r.double rQ$ between $rP$, $rQ$ is defined as $(rP imp rQ) conj (rQ imp rP)$. It is often read as "$rP$ iff $rQ$".
 ]
-#names(<iff>, "iff", "if and only if", "equivalently", "biconditional")
+#names(<iff>, "iff", "if and only if", "equivalently", "biconditional", "biconditionals", "logic.equivalent")
 #let iff = $#lk(<iff>, math.arrow.l.r.double)$
 
 #remark(title: "Equivalence conventions")[
@@ -258,16 +258,18 @@ Until now we have only covered a fairly small fragment of propositional logic, e
 #let tru = $#lk(<true>, math.top)$
 
 #proposition(title: "True and false")[
-  Let $dv(P), dv(Q), dv(R), dv(S)$ be #n[propositions]. Then, the following #n[hold]:
-  / Elimination of falsehood: $fls imp rP$, <false.elim>
-  / Falsehood is false: $neg fls$, <false.false>
-  / Truth is true: $tru$, <true.true>
-  / Truth values and biconditionals: $(tru iff rP) iff rP$, <iff.true> $(fls iff rP) iff neg rP$, <iff.false>
-  / Truth values and implications: $(tru imp rP) iff rP$, $(fls imp rP) iff tru$, $(rP imp tru) iff tru$, $(rP imp fls) iff neg rP$, <imp.true-false>
-  / Truth values and conjunction: $(tru conj rP) iff rP$, $(fls conj rP) iff fls$, <conj.true-false>
-  / Truth values and disjunction: $(tru disj rP) iff tru$, $(fls disj rP) iff rP$, <disj.true-false>
-  / Truth values and negation: $neg tru iff fls, neg fls iff tru$, <not.true-false>
-  / Absurdity: $neg (rP conj neg rP)$. <conj.absurd>  
+  Let $dv(P), dv(Q)$ be #n[propositions]. Then, the following #n[hold]:
+  / Elimination of #n[falsehood]: $fls imp rP$, <false.elim>
+  / #n[Falsehood] is false: $neg fls$, <false.false>
+  / #n[Truth] is true: $tru$, <true.true>
+  / Truth values and #n[biconditionals]: $(tru iff rP) iff rP$, <iff.true> $(fls iff rP) iff neg rP$, <iff.false>
+  / Truth values and #n[implications]: $(tru imp rP) iff rP$, $(fls imp rP) iff tru$, $(rP imp tru) iff tru$, $(rP imp fls) iff neg rP$, <imp.true-false>
+  / Truth values and #n[conjunction]: $(tru conj rP) iff rP$, $(fls conj rP) iff fls$, <conj.true-false>
+  / Truth values and #n[disjunction]: $(tru disj rP) iff tru$, $(fls disj rP) iff rP$, <disj.true-false>
+  / Truth values and #n[negation]: $neg tru iff fls, neg fls iff tru$, <not.true-false>
+  / Absurdity: $neg (rP conj neg rP)$, <conj.absurd>  
+  / Converse implications: $(rP imp rQ) imp neg rQ imp neg rP$, <imp.converse1>
+  / #n[Negation] respects equivalence: $(rP iff rQ) imp (neg rP iff neg rQ)$ <not.congr>
 ]
 #proof[
   + By definition of $fls$.
@@ -276,5 +278,21 @@ Until now we have only covered a fairly small fragment of propositional logic, e
   + If $tru iff rP$, then, since $tru$ is#justifyt(<true.true>) #n[true], so is $rP$. If $rP$ holds, then it also follows from $tru$ such that $rP imp tru$ and the other direction holds anyways.
 
     If $fls iff rP$, then in particular $(rP imp fls) iff neg P$. If $neg P$ holds, we have $rP imp fls$, and $fls imp rP$ holds anyways#justifyt(<false.elim>), so the #n[biconditional] is established.
-  
+  + We show all #n[biconditionals].
+    + We have $rP #justify(<iff.true>, iff) (tru iff rP) #justify(<iff>, iff) ((tru imp rP) conj (rP imp tru))$, but the second #n[proposition] is #n[true],#justifyt(<imp.right-const>) as $tru$ is#justifyt(<true.true>), such that the #n[conjunction] is #nn[equivalent][logic] to $tru imp rP$ as desired.
+    + By the #lk(<iff.true>)[above]#justifyt(<iff.trans>), we need to show $fls imp rP$ always holds. But that is already #lk(<false.elim>)[known].
+    + It suffices#justifyt(<iff.true>) to show $rP imp tru$. But that follows#justifyt(<imp.right-const>) from the #lk(<true.true>)[fact] that $tru$ is #n[true].
+    + By #lk(<not>)[definition] and #lk(<imp.refl>)[reflexivity] of #n[implication].
+  + We show both #n[biconditionals].
+    + $tru conj rP imp rP$ is clear. Assume $rP$, then $tru$ #lk(<true.true>)[is] also #n[true], hence so is $tru conj rP$.
+    + $bot conj rP imp bot$ is clear, the other direction follows from #lk(<false.elim>)[falsehood elimination].
+  + We show both #n[biconditionals].
+    + $tru imp (tru disj rP)$ follows from #lk(<or.intro>)[introduction], the other direction from the #lk(<true.true>)[fact] that $tru$ is #n[true].
+    + $P imp (fls disj rP)$  follows from #lk(<or.intro>)[introduction], the other direction from #lk(<or.elim>)[elimination] as well as the #lk(<false.elim>)[fact] that $fls imp rP$ and $rP imp rP$#justifyt(<imp.refl>)
+  + We show both #n[biconditionals].
+    + We have $not tru #justify(<true>,iff) not not fls iff ((fls imp fls) imp fls)$. But $fls imp fls$ holds#justifyt(<imp.refl>), hence by #n[modus ponens] we have $neg tru imp bot$. The other direction is obvious from #lk(<false.elim>)[elimination].
+    + By #lk(<true>)[definition].
+  + Assume $rP and neg rP$. Then we have $rP, neg rP$, but $neg rP #justify(<not>,iff) (rP imp fls)$, hence by #n[modus ponens], $fls$ holds.
+  + Rewrite $neg rP$ to#justifyt(<not>) $rP imp fls$, $neg rQ$ to $rQ imp fls$. Then, this follows from #lk(<imp.trans>)[transitivity of implications].
+  + Assume $rP iff rQ$. To show $neg rP imp neg rQ$, apply #lk(<imp.converse1>)[the previous statement] to $rP imp rQ$, and similarly for the other direction.
 ]
