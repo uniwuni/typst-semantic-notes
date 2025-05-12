@@ -4,7 +4,6 @@
 #import "@preview/quick-maths:0.2.1": shorthands
 #set text(lang: "en")
 #show: show-theorion
-#include "notes/001logic.typ"
 /*
 #definition(title: "Injectivity")[
   A function $dv(f) : dv(A) -> dv(B)$ is called #def(<inj>)[injective], if, for all $dv(a), dv(a') in rv(A)$, 
@@ -23,3 +22,7 @@
 
 #names(<nat-num>, plural: true, "natural number", "nonnegative integer")
 */
+= Foundations
+#include "notes/001logic.typ"
+
+#bibliography("notes/bib.yml")

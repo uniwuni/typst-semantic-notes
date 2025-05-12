@@ -1,3 +1,4 @@
+
 #import "../semantics.typ": *
 #import "@preview/theorion:0.3.3": *
 #import cosmos.fancy: *
@@ -5,7 +6,6 @@
 #set text(lang: "en")
 #show: show-theorion
 
-= Foundations
 == Logic
 === Propositional Logic
 
@@ -344,6 +344,7 @@ basic rules of replacement of terms as given.
 #def(<term>)[Terms] in general are an undefined sort that in particular include term variables. 
 ]
 #names(<term>, plural:true, "term", "object")
+=== Quantifiers
 #let forall(x) = $#lk(<all>, math.forall) dv(#x).$
 #definition(title: "Universal quantification")[
   Let $dv(P)(dv(x))$ be a #n[proposition] in which (next to other variables) $rx$ might appear.
@@ -352,7 +353,7 @@ basic rules of replacement of terms as given.
   + If $rP(rx)$ can be derived from hypotheses in which $rx$ does not appear, $forall(x) rP(rx)$ holds. <all.intro>
   + From $forall(x) rP(rx)$ and any #n[term] $dv(t)$, we can derive $rP(rt)$. <all.elim>
 ]
-#names(<all>, "for all", "all", "every", "Universal quantification", "Universal quantifier", "universal quantifiers")
+#names(<all>, "for all", "all", "every", "Universal quantification", "Universal quantifier", "universal quantifiers", "universally quantified")
 #remark(title: "Proofs of universally quantified statements")[
   Assume $dv(P)(x)$ is some #n[proposition] that declares "type information", e.g. for all $dv(x)$, we have $rP(rx) iff rx "is a group"$. Then, to prove #n[propositions] of the form $forall(x) rP(rx) imp dv(Q)(rx)$ for some other #n[proposition] $rQ(x)$, we usually start proofs like "Let $rx$ fulfill $rP$ (i.e. be a group)" and conclude "Hence, $rx$ fulfills $rQ$".
 ]
@@ -391,7 +392,7 @@ basic rules of replacement of terms as given.
 #remark(title: [Existential quantification in proofs])[
   To apply #lk(<exists.elim>)[existential elimination] on $exists(x) dv(P)(rx)$, we often word proofs like "We obtain an $dv(x)$ such that $rP(rx)$" or similar. To apply #lk(<exists.intro>)[existential introduction], a common phrasing is "Use $x$, we show that it satisfies $rP$".
 ]
-#names(<exists>, "for any", "for some", "exist", "exists", "Existential quantification", "Existential quantifier", "existential quantifiers")
+#names(<exists>, "for any", "for some", "exist", "exists", "Existential quantification", "Existential quantifier", "existential quantifiers", "existence")
 #proposition(title: "Existential quantification and connectives")[
   Let $dv(P)(dv(x)), dv(Q)(rx)$ be #n[propositions], $dv(R)$ a #n[proposition] in which $rx$ does not appear. Furthermore, let $dv(S)(rx,dv(y))$ be a #n[proposition]. Then, we have the following:
   / #n[Existential quantification] of constant #n[propositions]: $rR iff exists(x) rR$, <exists.const>
@@ -402,7 +403,8 @@ basic rules of replacement of terms as given.
   / #n[Existential quantification] and #n[conjunction] (special case): $(exists(x) rP(rx) conj rR) iff ((exists(x) rP(rx)) conj rR)$, <exists.and-const>
   / #n[Existential quantification] and #n[biconditionals] in a #n[universal quantifier]: $(forall(x) rP(rx) iff rQ(rx)) imp (exists(x) rP(rx)) iff (exists(x) rQ(rx))$, <exists.all-iff>,
   / Swapping #n[existential quantifiers]: $(exists(x) exists(y) rS(rx,ry)) iff (exists(y) exists(x) rS(rx,ry))$ <exists.swap>,
-  / #n[Existential quantifiers], #n[universal quantifiers] and #n[negation]: $(exists(x) neg rP(rx)) iff neg (forall(x) rP(rx))$ and $(forall(x) neg rP(rx)) iff neg (exists(x) rP(rx))$ <exists.not-all>.
+  / #n[Existential quantifiers], #n[universal quantifiers] and #n[negation]: $(exists(x) neg rP(rx)) iff neg (forall(x) rP(rx))$ and $(forall(x) neg rP(rx)) iff neg (exists(x) rP(rx))$ <exists.not-all>,
+  / #n[Existential quantifiers] and #n[universal quantifiers] "swapping": $(exists(x) forall(y) rS(rx,ry)) imp forall(y) exists(x) rS(rx,ry)$ <exists.exists-all-all-exists>.
 ]
 #proof[
   + One direction is just the #lk(<exists.intro>)[introduction rule]. The other one follows from #lk(<exists.elim>)[elimination] because we can derive $rR$ from $rR$ no matter what.
@@ -423,5 +425,37 @@ basic rules of replacement of terms as given.
     + From the first statement applied to $neg rP(rx)$, we obtain 
       $(exists(x) neg neg rP(rx)) iff neg (forall(x) neg rP(rx))$.
       So $ neg (exists(x) rP(rx)) #justify(<exists.all-iff>, iff) neg (exists(x) neg neg rP(rx)) #justify(<not.congr>,iff) neg neg (forall(x) neg rP(rx)) #justify(<not.not-iff>, iff) forall(x) neg rP(rx). $
-  
+  + Obtain an $dv(x)$ such that $forall(y) rS(rx, ry)$ and introduce $dv(y)$. Then $rS(rx, ry)$, such that if we use $rx$, we are done.
   ]
+
+==== Equality
+So far, no way of actually incorporating terms in formulas has been constructed, such that no expressive power is gained. This now changes.
+
+#definition(title: [Equality])[
+  Let $dv(t), dv(s)$ be #n[terms]. Then, the #n[proposition] $t = s$ asserts their #def(<eq>)[equality].
+  It conforms to the following rules:
+  / Reflexivity: for all #n[terms] $dv(t)$, $rt = rt$ #n[holds], <eq.refl>
+  / Substitution: for all #n[terms] $dv(t), dv(s)$ and any #n[proposition] $dv(P)(rt)$ that #n[holds] and in which $rt$ appears, any instance of $rt$ can be replaced by $rs$ and it still #n[holds]. <eq.subst>
+]
+#show "=": it => link(<eq>,$=$)
+#names(<eq>, "equals", "same", "identical", "identity", "equal",
+      "identities", "equalities", "equation")
+
+#proposition(title: [Elementary properties of equality])[
+  Let $dv(t), dv(s), dv(r)$ be #n[terms], $dv(u)(rt)$ be a #n[term] in which $rt$ appears, $dv(P)(rt)$ a #n[proposition] in which $rt$ appears. Then, the following #n[hold]:
+  / Symmetry: $rt = rs imp rs = rt$<eq.symm>,
+  / Transitivity: $rs = rr imp rt = rs imp rt = rr$<eq.trans>,
+  / Substitution (reworded): $rt = rs imp (rP(rt) iff rP(rs))$,
+  / Term substitution: $ru(rt) = ru(rs)$, where $ru(rs)$ denotes the substitution of $rt$ by $rs$.<eq.congr>
+  In particular, all of these hold when $rt, rs$ are variables and #n[universally quantified].
+]
+#remark(title: "How to handle definitions")[
+  In mathematics, one often defines #n[terms] and properties, usually based on existing ones. How do we handle this in our logic? There are multiple options.
+  - Consider definitions purely metamathematically and treat a definition like $f(x) := 2x$ just as a shorthand to the reader. This is among the simpler options, but comes with issues. When we define a function $f$ as above, we want to be able to treat it as an object on its own. But if $f(x) := 2x$ is just a replacement rule, $f$ on its own makes no sense mathematically. This can be taken care of by introducing extra syntax where $f(x) := 2x$ is, on its own, a shorthand for $f := x mapsto 2x$, which is mathematically coherent.
+  - Add definitions as axioms, whose conservativity can be proven: For every #n[term] $t$ we define, we add a new primitive symbol $t$ and assert that $t$ is equal to its definition like we assert say reflexivity. We can then metamathematically prove that these definitional axioms do not fundamentally alter our system, i.e. do not allow us to prove anything new the symbol does not appear in. However, it seems philosophically unsatisfactory. For an example, see @metamath.
+  - Integrate definitions in our logic: We could add new types of sentences that reflect definitions more directly, as is done in programming languages, and while this is the most powerful option, it is unwieldy and it is easy to accidentially arrive at inconsistent systems.
+  We will mostly stick to option 1. Whenever a new "type" of definition appears, like for relations or functions, we will quickly take note of it. However, one more problem arises: many mathematical definitions take the form of "define $dv(t)$ as the unique $dv(x)$ such that $dv(P)(rx)$". This does not translate to any term on its own --- in notation, we know something along the lines of $exists(x) rP(rx) conj forall(y) rP(ry) imp ry = rx$ (which we will soon use as the definition of unique existence), but we cannot name that $rx$ in any term. A simple solution: Prepend every #n[proposition] $dv(Q)$ considered after to turn it into $forall(t) rP(rt) imp rQ$. Now every occurrence of $rt$ is known to satisfy its property and it can be proven to be unique in it from context.
+
+  There are also more logical approaches that allow you to directly name the object $rt$ with _description operators_ - denote such an operator by $iota$, then $iota_(rx)(rP)$ would refer to the #n[term] $t$ and be well-defined due to the unique existence. However, such operators can have surprisingly far-reaching logical consequences (for example, imply the axiom of choice as in @bourbaki-sets).
+]
+

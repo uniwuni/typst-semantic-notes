@@ -1,0 +1,23 @@
+metamath:
+  type: Book
+  title: "Metamath: A Computer Language for Mathematical Proofs"
+  author:
+    - Megill, Norman
+    - Wheeler, David A.
+  date: 2019
+  serial-number:
+    isbn: 9780359702237
+
+bourbaki-sets:
+  type: Book
+  title: "Theory of Sets"
+  author:
+    - Bourbaki, Nicolas
+  date: 2004
+  serial-number:
+    isbn: 9783540225256
+  publisher:
+    name: Springer
+    location: Berlin, Heidelberg, New York
+  parent:
+    name: Elements of Mathematics
