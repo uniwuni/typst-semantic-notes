@@ -87,6 +87,7 @@
   it
 }
 */
+/*
 #show figure: it => if it.has("body") and it.body.has("children") and it.body.children.at(0).value.body.children.find(x => x.has("value") and x.value.at("keepvar", default: none) != none) != none {
   
   let vars = it.body.children.at(0).value.body.children.find(x => x.has("value") and x.value.at("keepvar", default: none) != none).value.at("keepvar").map(x => x.text)
@@ -97,7 +98,7 @@
 } else {
   it
 }
-
+*/
 #let lk(..args) = text(rgb(60,0,60), link(..args))
 
 // no v!

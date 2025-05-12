@@ -264,10 +264,10 @@ Until now we have only covered a fairly small fragment of propositional logic, e
   / #n[Truth] is true: $tru$, <true.true>
   / Truth values and #n[biconditionals]: $(tru iff rP) iff rP$, <iff.true> $(fls iff rP) iff neg rP$, <iff.false>
   / Truth values and #n[implications]: $(tru imp rP) iff rP$, $(fls imp rP) iff tru$, $(rP imp tru) iff tru$, $(rP imp fls) iff neg rP$, <imp.true-false>
-  / Truth values and #n[conjunction]: $(tru conj rP) iff rP$, $(fls conj rP) iff fls$, <conj.true-false>
-  / Truth values and #n[disjunction]: $(tru disj rP) iff tru$, $(fls disj rP) iff rP$, <disj.true-false>
+  / Truth values and #n[conjunction]: $(tru conj rP) iff rP$, $(fls conj rP) iff fls$, <and.true-false>
+  / Truth values and #n[disjunction]: $(tru disj rP) iff tru$, $(fls disj rP) iff rP$, <or.true-false>
   / Truth values and #n[negation]: $neg tru iff fls, neg fls iff tru$, <not.true-false>
-  / Absurdity: $neg (rP conj neg rP)$, <conj.absurd>  
+  / Absurdity: $neg (rP conj neg rP)$, <and.absurd>  
   / Converse implications: $(rP imp rQ) imp neg rQ imp neg rP$, <imp.converse1>
   / #n[Negation] respects equivalence: $(rP iff rQ) imp (neg rP iff neg rQ)$, <not.congr>
   / Double #n[negation]: $rP imp neg neg rP$. <not.not-of>
@@ -317,18 +317,111 @@ This axiom has rather far reaching consequences in that, unlike the other rules 
   + One direction has #lk(<not.not-of>)[already been shown]. For $neg neg rP imp rP$, use #n[excluded middle] and consider the cases $rP, neg rP$:
     If $rP$ holds, we are done. If $neg P$ holds, then so does $fls$ by #n[modus ponens], hence $P$ does, too#justifyt(<false.elim>).
   + One direction has #lk(<imp.converse1>)[already been shown]. Now assume $neg rQ imp neg rP$. By the #lk(<imp.converse1>)[proven direction], we can see that $neg neg rP imp neg neg rQ$. Rewrite to $rP imp rQ$#justifyt(<not.not-iff>)#justifyt(<imp.congr>).
-  + We #n[equivalently]#justifyt(<not.not-iff>)#justifyt(<imp.congr>) show $(neg rP imp rP) imp neg neg rP$. Assume $neg rP imp rP, neg rP$. Then, by #n[modus ponens], $rP$ follows, which is #n[absurd]#justifyt(<conj.absurd>).
+  + We #n[equivalently]#justifyt(<not.not-iff>)#justifyt(<imp.congr>) show $(neg rP imp rP) imp neg neg rP$. Assume $neg rP imp rP, neg rP$. Then, by #n[modus ponens], $rP$ follows, which is #n[absurd]#justifyt(<and.absurd>).
   + Rewrite to $rP disj neg rP$#justifyt(<iff.true>)#justifyt(<iff.false>) and use #n[excluded middle].
 ]
 #remark(title: [Truth tables])[
-  The #lk(<propositions-discrete>)[discreteness property] allows us to check validity of #n[statements] (in some variables) very easily (though the method is computationally expensive): just enumerate all the possible cases. For example, we wish to check whether for all propositions $dv(P), dv(Q)$, $neg rP imp ((rP disj rQ) iff (rP conj rQ))$ is a #n[tautology], so let us consider a table:
+  The #lk(<propositions-discrete>)[discreteness property] allows us to check validity of #n[statements] (in some variables) very easily (though the method is computationally expensive): just enumerate all the possible cases. For example, we wish to check whether for all #n[propositions] $dv(P), dv(Q)$, $neg rP imp ((rP disj rQ) iff (rP conj rQ))$ is a #n[tautology], so let us consider a table:
   #table(
     columns: 7,
     $dv(P)$, $dv(Q)$, $neg rP$, $rP disj rQ$, $rP conj rQ$, $(rP disj rQ) iff (rP conj rQ)$, $neg rP imp (rP disj rQ) iff (rP conj rQ)$,
-    $fls$, $fls$, $tru$, $fls$, $fls$, $tru$, $tru$,
+    $fls$, $fls$, $tru$, $fls$, $fls$, $tru$, $tru$, 
     $fls$, $tru$, $tru$, $tru$, $fls$, $fls$, $fls$,
     $tru$, $fls$, $fls$, $tru$, $fls$, $tru$, $tru$,
     $tru$, $tru$, $fls$, $tru$, $tru$, $tru$, $tru$
   )
   We can see that this #n[statement] is true unless $rP$ is #n[false] and $rQ$ is #n[true] and in particular, it is not tautological.
 ]
+=== First-Order Logic
+The logic previously described clearly does not suffice to do any "serious" mathematics in --- it has no notion of equality, and does not allow for #n[statements] about any _objects_, 
+only about other #n[propositions]. Hence, we introduce quantifiers. These require a notion of term variable
+that is allowed to appear in the body. For example, if we want to state "All $dv(x)$ possess property $dv(P)(rx)$", 
+$rx$ must clearly appear in $rP(rx)$ in some way, but the name of $rx$ itself does not matter,
+as "All $dv(y)$ possess property $rP(ry)$" obviously has the same meaning. We will treat these 
+basic rules of replacement of terms as given. 
+
+#definition(title: "Terms")[
+#def(<term>)[Terms] in general are an undefined sort that in particular include term variables. 
+]
+#names(<term>, plural:true, "term", "object")
+#let forall(x) = $#lk(<all>, math.forall) dv(#x).$
+#definition(title: "Universal quantification")[
+  Let $dv(P)(dv(x))$ be a #n[proposition] in which (next to other variables) $rx$ might appear.
+  Then, the #n[proposition] given by the #def(<all>)[universal quantification] of $rP$ in $rx$ is denoted
+  $forall(x) rP(rx)$ (read: "all $dv(x)$ are $rP$/fulfill $rP(rx)$"). It conforms to the following rules:
+  + If $rP(rx)$ can be derived from hypotheses in which $rx$ does not appear, $forall(x) rP(rx)$ holds. <all.intro>
+  + From $forall(x) rP(rx)$ and any #n[term] $dv(t)$, we can derive $rP(rt)$. <all.elim>
+]
+#names(<all>, "for all", "all", "every", "Universal quantification", "Universal quantifier", "universal quantifiers")
+#remark(title: "Proofs of universally quantified statements")[
+  Assume $dv(P)(x)$ is some #n[proposition] that declares "type information", e.g. for all $dv(x)$, we have $rP(rx) iff rx "is a group"$. Then, to prove #n[propositions] of the form $forall(x) rP(rx) imp dv(Q)(rx)$ for some other #n[proposition] $rQ(x)$, we usually start proofs like "Let $rx$ fulfill $rP$ (i.e. be a group)" and conclude "Hence, $rx$ fulfills $rQ$".
+]
+#proposition(title: "Universal quantification and connectives")[
+  Let $dv(P)(dv(x)), dv(Q)(rx)$ be #n[propositions], $dv(R)$ a #n[proposition] in which $rx$ does not appear. Furthermore, let $dv(S)(rx,dv(y))$ be a #n[proposition]. Then, we have the following:
+  / #n[Universal quantification] of constant #n[propositions]: $rR iff forall(x) rR$, <all.const>
+  / #n[Universal quantification] and #n[implication]: $(forall(x) rP(rx) imp rQ(rx)) imp (forall(x) rP(rx)) imp forall(x) rQ(rx)$, <all.imp>
+  / #n[Universal quantification] and #n[conjunction]: $(forall(x) rP(rx) conj rQ(rx)) iff (forall(x) rP(rx) conj forall(x) rQ(rx))$, <all.and>
+  / #n[Universal quantification] and #n[disjunction]: $(forall(x) rP(rx) disj forall(x) rQ(rx)) imp (forall(x) rP(rx) disj rQ(rx))$, <all.or>
+  / #n[Universal quantification] and #n[biconditionals]: $(forall(x) rP(rx) iff rQ(rx)) imp (forall(x) rP(rx)) iff forall(x) rQ(rx)$, <all.iff>
+  / #n[Universal quantification] and #n[disjunction] (special case): $(forall(x) rP(rx) disj rR) iff ((forall(x) rP(rx)) disj rR)$, <all.or-const>
+  / Swapping #n[universal quantifiers]: $(forall(x) forall(y) rS(rx,ry)) iff (forall(y) forall(x) rS(rx,ry))$. <all.swap>
+]
+#proof[
+  + $rR imp forall(x) rR$ follows from the #lk(<all.intro>)[introduction rule], as $rx$ does not appear in the hypothesis $rR$. The other direction follows from #lk(<all.elim>)[elimination].
+  + Assume $forall(x) rP(rx) imp rQ(rx), forall(x) rP(rx)$ and use #lk(<all.intro>)[introduction] to obtain an $dv(y)$ for which we have to prove $rQ(ry)$.
+    Then, by #lk(<all.elim>)[elimination], we have $rP(ry) imp rQ(ry)$ and $rP(ry)$, hence $rQ(ry)$ as needed.
+  + We prove both directions:
+    + Assume $forall(x) rP(rx) conj rQ(rx)$. We need to show $forall(y) rP(ry)$,
+      $forall(z) rQ(rz)$ respectively. #lk(<all.intro>)[Introduce] $dv(y)$. Then by #lk(<all.elim>)[elimination], we have $rP(ry) conj rQ(ry)$, hence in particular#justifyt(<and.elim>) $rP(ry)$ as needed. The same argument works for $forall(z) rQ(rz)$.
+    + Assume $forall(x) rP(rx), forall(x) rQ(rx)$#justifyt(<and.elim>) and #lk(<all.intro>)[introduce] $dv(y)$. Then, by assumption#justifyt(<all.elim>), we have $rP(ry), rQ(ry)$, hence#justifyt(<and.intro>) $rP(ry) conj rQ(ry)$, such that $forall(y) rP(ry) conj rQ(ry)$. 
+  + First#justifyt(<or.elim>), assume $forall(x) rP(rx)$ and #lk(<all.intro>)[introduce] $dv(y)$. Then clearly, $rP(ry)$#justifyt(<all.elim>) and $rP(ry) disj rQ(ry)$#justifyt(<or.intro>), hence $forall(y) rP(ry) disj rQ(ry)$. Similar reasoning works if $forall(x) rQ(rx)$ #n[holds].
+  + From the definition of #n[iff], we have $ (forall(x) rP(rx) iff rQ(rx)) #justify(<all.and>, iff) (forall(x) rP(rx) imp rQ(rx) conj forall(x) rQ(rx) imp rP(rx)). $
+    Hence#justifyt(<all.imp>) $forall(x) rP(rx) imp forall(x) rQ(rx)$, $forall(x) rQ(rx) imp forall(x) rP(rx)$ and we are done#justifyt(<iff>)#justifyt(<and.intro>).
+  + One direction follows from #lk(<all.or>)[above]. For the other, use #n[excluded middle] on $rR$: If $rR$ #n[holds], we are done#justifyt(<or.intro>), if $neg rR$ does, we will show $forall(x) rP(rx)$. #lk(<all.intro>)[Introduce] $dv(x)$. Then#justifyt(<all.elim>) by assumption, $rP(rx) disj rR$. But the latter would be #lk(<and.absurd>)[contradictory], hence $rP(rx)$ and we are done.
+  + Assume $forall(x) forall(y) rS(x,y)$ and introduce#justifyt(<all.intro>) $dv(w),dv(v)$. Then, by assumption#justifyt(<all.elim>), $forall(y) rS(rv(v),ry)$ hence also $rS(rv(v), rw)$ which is precisely what we needed to show.
+]
+#let exists(x) = $#lk(<exists>, math.exists) dv(#x).$
+#definition(title: "Existential quantification")[
+  Let $dv(P)(dv(x))$ be a #n[proposition] in which (next to other variables) $rx$ might appear and $dv(Q)$ a #n[proposition] in which $rx$ does not appear.
+  Then, the #n[proposition] given by the #def(<exists>)[existential quantification] of $rP$ in $rx$ is denoted
+  $exists(x) rP(rx)$ (read: "there exists a $dv(x)$ that is $rP$"). It conforms to the following rules:
+  + For any #n[term] $dv(t)$ and $rP(rt)$, we can derive $exists(x) rP(rx)$. <exists.intro>
+  + If we can derive $rQ$ from $rP(rx)$ such that $rx$ appears in no other hypothesis and $exists(x) rP(rx)$ holds, then so does $rQ$. <exists.elim>
+]
+#remark(title: [Existential quantification in proofs])[
+  To apply #lk(<exists.elim>)[existential elimination] on $exists(x) dv(P)(rx)$, we often word proofs like "We obtain an $dv(x)$ such that $rP(rx)$" or similar. To apply #lk(<exists.intro>)[existential introduction], a common phrasing is "Use $x$, we show that it satisfies $rP$".
+]
+#names(<exists>, "for any", "for some", "exist", "exists", "Existential quantification", "Existential quantifier", "existential quantifiers")
+#proposition(title: "Existential quantification and connectives")[
+  Let $dv(P)(dv(x)), dv(Q)(rx)$ be #n[propositions], $dv(R)$ a #n[proposition] in which $rx$ does not appear. Furthermore, let $dv(S)(rx,dv(y))$ be a #n[proposition]. Then, we have the following:
+  / #n[Existential quantification] of constant #n[propositions]: $rR iff exists(x) rR$, <exists.const>
+  / #n[Existential quantification] and #n[implication]: $((exists(x) rP(rx)) imp exists(x) rQ(rx))) imp (exists(x) rP(rx) imp rQ(rx))$, <exists.imp>
+  / #n[Existential quantification] and #n[implication] in a #n[universal quantifier]: $(exists(x) rP(rx)) imp (forall(x) rP(rx) imp rQ(rx)) imp (exists(x) rQ(rx))$, <exists.all-imp>
+  / #n[Existential quantification] and #n[conjunction]: $(exists(x) rP(rx) conj rQ(rx)) imp (exists(x) rP(rx) conj exists(x) rQ(rx))$, <exists.and>
+  / #n[Existential quantification] and #n[disjunction]: $(exists(x) rP(rx) disj exists(x) rQ(rx)) iff (exists(x) rP(rx) disj rQ(rx))$, <exists.or>
+  / #n[Existential quantification] and #n[conjunction] (special case): $(exists(x) rP(rx) conj rR) iff ((exists(x) rP(rx)) conj rR)$, <exists.and-const>
+  / #n[Existential quantification] and #n[biconditionals] in a #n[universal quantifier]: $(forall(x) rP(rx) iff rQ(rx)) imp (exists(x) rP(rx)) iff (exists(x) rQ(rx))$, <exists.all-iff>,
+  / Swapping #n[existential quantifiers]: $(exists(x) exists(y) rS(rx,ry)) iff (exists(y) exists(x) rS(rx,ry))$ <exists.swap>,
+  / #n[Existential quantifiers], #n[universal quantifiers] and #n[negation]: $(exists(x) neg rP(rx)) iff neg (forall(x) rP(rx))$ and $(forall(x) neg rP(rx)) iff neg (exists(x) rP(rx))$ <exists.not-all>.
+]
+#proof[
+  + One direction is just the #lk(<exists.intro>)[introduction rule]. The other one follows from #lk(<exists.elim>)[elimination] because we can derive $rR$ from $rR$ no matter what.
+  + Assume $((exists(x) rP(rx)) imp exists(x) rQ(rx)))$ and use #n[excluded middle] on $exists(x)(rP(rx))$. If it holds, so does $exists(x) rQ(rx)$. Now use#justifyt(<exists.intro>) the $dv(x)$ fulfilling $rQ(rx)$ - clearly, it also fulfills $rP(rx) imp rQ(rx)$. If $neg exists(x)(rP(rx))$ holds, also use that $rx$. Since it fulfills $neg rP(rx)$, $rP(rx) imp rQ(rx)$ is true by #lk(<and.absurd>)[contradiction].
+  + Assume $exists(x) rP(rx)$ and $forall(x) rP(rx) imp rQ(rx)$. Obtain some $dv(x)$ with $rP(rx)$. Then, we must also have $rQ(rx)$. Use that $rx$, and we have shown $exists(x) rQ(rx)$.
+  + Assume $exists(x) rP(rx) conj rQ(rx)$ and obtain a $dv(x)$ such that $rP(rx)$, $rQ(rx)$. Then, use that $rx$ to show $exists(x) rP(rx)$, $exists(x) rQ(rx)$.
+  + We show both directions.
+    + If $exists(x) rP(rx)$, we can see#justifyt(<exists.all-imp>)#justifyt(<or.intro>) that $exists(x) rP(rx) or rQ(rx)$. Similarly for $exists(x) rQ(rx)$.
+    + Obtain an $dv(x)$ with $rP(rx) disj rQ(rx)$. If $rP(rx)$ holds, use that $rx$ to show $exists(x) rP(rx)$, hence $exists(x) rP(rx) disj exists(x) rQ(rx)$. If $rQ(rx)$ holds, use similar reasoning.
+  + The left-to-right direction follows from above#justifyt(<exists.and>). So assume $(exists(x) rP(rx) conj rR)$, e.g. obtain an $dv(x)$ with $rP(rx)$ while $rR$ also holds. Then, $rP(rx) conj rR$ also holds, hence by #lk(<exists.intro>)[introduction], we get $exists(x) rP(rx) conj rR$.
+  + Assume $forall(x) rP(rx) iff rQ(rx)$. Then in particular#justifyt(<iff>)#justifyt(<all.imp>), $forall(x) rP(rx) imp rQ(rx)$, hence#justifyt(<exists.all-imp>) $exists(x) rP(rx) imp exists(x) rQ(rx)$. Similar for the other direction.
+  + Assume $exists(x) exists(y) rS(rx,ry)$. Now obtain an $dv(x)$ such that $exists(y) rS(rx, ry)$ and do it again to obtain a $dv(y)$ with $rS(rx,ry)$. 
+    Now $exists(v)rS(rv(v),ry)$ follows by using $rx$ and $exists(w)exists(v)rS(rv(v),rw)$ follows by using $ry$.
+  + We show both statements:
+    + We show both directions:
+      + Assume $exists(x) neg rP(rx)$ and $forall(x) rP(rx)$. Obtain an $dv(x)$ with $neg rP(rx)$. Then, by assumption, $rP(rx)$. #n[Contradiction]. Note that this direction does not require #n[excluded middle].
+      + Assume $neg forall(x) rP(rx)$. It suffices to show $neg neg exists(x) neg rP(rx)$ by #lk(<not.not-iff>)[double negation elimination]. So by taking the #lk(<imp.converse>)[converse] we need to show $(neg exists(x) neg rP(rx)) imp forall(x) rP(rx)$. So assume $neg exists(x) neg rP(rx)$ and introduce some $dv(x)$. We need to show $rP(rx) #justify(<not.not-iff>,iff) neg neg rP(rx)$. So assume $neg rP(rx)$ -- then, use $rx$ to show $exists(x) neg rP(rx)$, #n[contradiction].
+    + From the first statement applied to $neg rP(rx)$, we obtain 
+      $(exists(x) neg neg rP(rx)) iff neg (forall(x) neg rP(rx))$.
+      So $ neg (exists(x) rP(rx)) #justify(<exists.all-iff>, iff) neg (exists(x) neg neg rP(rx)) #justify(<not.congr>,iff) neg neg (forall(x) neg rP(rx)) #justify(<not.not-iff>, iff) forall(x) neg rP(rx). $
+  
+  ]
