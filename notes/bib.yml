@@ -10,7 +10,7 @@ metamath:
 
 bourbaki-sets:
   type: Book
-  title: "Theory of Sets"
+  title: Theory of Sets
   author:
     - Bourbaki, Nicolas
   date: 2004
@@ -21,3 +21,20 @@ bourbaki-sets:
     location: Berlin, Heidelberg, New York
   parent:
     name: Elements of Mathematics
+
+axiomatic-set-theory:
+  type: Book
+  title: Introduction to Axiomatic Set Theory
+  author:
+    - Takeuti, Gaising
+    - Zaring, Wilson M.
+  date: 1982
+  serial-number:
+    isbn: 9781461381709
+  volume: 1
+  edition: 2nd
+  publisher:
+    name: Springer
+    location: Berlin, Heidelberg, New York
+  parent:
+    name: Graduate Texts in Mathematics

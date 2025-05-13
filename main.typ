@@ -24,5 +24,5 @@
 */
 = Foundations
 #include "notes/001logic.typ"
-
+#include "notes/002sets.typ"
 #bibliography("notes/bib.yml")

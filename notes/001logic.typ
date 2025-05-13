@@ -55,14 +55,15 @@
   + We need to derive $holds (rP imp rQ) imp rP imp rR$ from 
     $holds rQ imp rR$, e.g. derive $holds rP imp rR$ from 
     $holds rQ imp rR$ and $holds rP imp rQ$,
-    so it suffices to derive $holds rR$ from $holds rQ imp rR$, $holds rP imp rQ$, and $holds rP$. 
+    so it suffices to derive $holds rR$ from $das(1,holds rQ imp rR
+    )$, $das(2,holds rP imp rQ)$, and $das(3,holds rP)$. 
 
-    From #n[modus ponens], we get $holds rQ$ from $holds rP$, $holds rP imp rQ$. Again using #n[modus ponens] on $holds rQ$ and $holds rQ imp rR$, $holds rR$ follows.
-  + Similarly to above, assume $holds rP imp rP imp rQ$ and $holds rP$.
-    Then, #n[modus ponens] shows $holds rP imp rQ$, and, again using #n[modus ponens], one has $holds rQ$.
-  + Assume $holds rP, holds rQ$. We need to show $holds rP$, but that is 
-    already one of our assumptions. $rQ$
-  + Assume $holds rP imp rQ imp rR, holds rQ, holds rP$. By #n[modus ponens], $holds rQ imp rR$, by #n[modus ponens], $holds rR$.]
+    From #n[modus ponens]#justifytas(3,2), we get $das(4,holds rQ)$ from $holds rP$, $holds rP imp rQ$. Again using #n[modus ponens]#justifytas(1,4) on $holds rQ$ and $holds rQ imp rR$, $holds rR$ follows.
+  + Similarly to above, assume #das(1)[$holds rP imp rP imp rQ$] and #das(2)[$holds rP$].
+    Then, #n[modus ponens]#justifytas(1,2) shows #das(3,$holds rP imp rQ$), and, again using #n[modus ponens]#justifytas(2,3), one has $holds rQ$.
+  + Assume $das(1,holds rP), das(2,holds rQ)$. We need to show $holds rP$, but that is 
+    already #ras(1)[one of our assumptions].
+  + Assume $das(1,holds rP imp rQ imp rR), das(2,holds rQ), das(3,holds rP)$. By #n[modus ponens]#justifytas(1,3), $das(4,holds rQ imp rR)$, by #n[modus ponens]#justifytas(2,4), $holds rR$.]
 
 #remark(title: "Omitting the tack")[
   If no confusion arises between asserting the truth of a #n[proposition] $dv(P)$ and just naming it, we often write just $rP$ instead of $holds rP$.
@@ -353,7 +354,7 @@ basic rules of replacement of terms as given.
   + If $rP(rx)$ can be derived from hypotheses in which $rx$ does not appear, $forall(x) rP(rx)$ holds. <all.intro>
   + From $forall(x) rP(rx)$ and any #n[term] $dv(t)$, we can derive $rP(rt)$. <all.elim>
 ]
-#names(<all>, "for all", "all", "every", "Universal quantification", "Universal quantifier", "universal quantifiers", "universally quantified")
+#names(<all>, "for all", "all", "every", "Universal quantification", "any", "for any", "Universal quantifier", "universal quantifiers", "universally quantified")
 #remark(title: "Proofs of universally quantified statements")[
   Assume $dv(P)(x)$ is some #n[proposition] that declares "type information", e.g. for all $dv(x)$, we have $rP(rx) iff rx "is a group"$. Then, to prove #n[propositions] of the form $forall(x) rP(rx) imp dv(Q)(rx)$ for some other #n[proposition] $rQ(x)$, we usually start proofs like "Let $rx$ fulfill $rP$ (i.e. be a group)" and conclude "Hence, $rx$ fulfills $rQ$".
 ]
@@ -435,7 +436,7 @@ So far, no way of actually incorporating terms in formulas has been constructed,
   Let $dv(t), dv(s)$ be #n[terms]. Then, the #n[proposition] $t = s$ asserts their #def(<eq>)[equality].
   It conforms to the following rules:
   / Reflexivity: for all #n[terms] $dv(t)$, $rt = rt$ #n[holds], <eq.refl>
-  / Substitution: for all #n[terms] $dv(t), dv(s)$ and any #n[proposition] $dv(P)(rt)$ that #n[holds] and in which $rt$ appears, any instance of $rt$ can be replaced by $rs$ and it still #n[holds]. <eq.subst>
+  / Substitution: for all #n[terms] $dv(t), dv(s)$ with $rt = rs$ and any #n[proposition] $dv(P)(rt)$ that #n[holds] and in which $rt$ appears, any instance of $rt$ can be replaced by $rs$ and it still #n[holds]. <eq.subst>
 ]
 #show "=": it => link(<eq>,$=$)
 #names(<eq>, "equals", "same", "identical", "identity", "equal",
@@ -449,6 +450,13 @@ So far, no way of actually incorporating terms in formulas has been constructed,
   / Term substitution: $ru(rt) = ru(rs)$, where $ru(rs)$ denotes the substitution of $rt$ by $rs$.<eq.congr>
   In particular, all of these hold when $rt, rs$ are variables and #n[universally quantified].
 ]
+#let defiff = link(<handle-definitions>, $:arrow.l.r.double$)
+#let defeq = link(<handle-definitions>, $:=$)
+#proof[
+  + Assume $rt = rs$. Then apply #lk(<eq.subst>)[substitution] to the assumption and $dv(Q)(dv(x)) defiff rx = rt$. The instance $rQ(rt)$ clearly holds from #lk(<eq.refl>)[reflexivity] such that we can conclude $rs = rt$.
+  + Assume $rs = rr, rt = rs$. Apply #lk(<eq.subst>)[substitution] to $dv(Q)(dv(x)) defiff rt = rx$. Then one assumption gives us $rQ(rs)$ and from $rs = rr$ we can conclude $rQ(rr) defiff rt = rr$ as desired.
+  + Assume $rt = rs$ and $rP(rr)$, then $rP(rs)$ follows from #lk(<eq.subst>)[substitution]. The other direction follows from #lk(<eq.subst>)[substitution] and #lk(<eq.symm>)[symmetry].
+]
 #remark(title: "How to handle definitions")[
   In mathematics, one often defines #n[terms] and properties, usually based on existing ones. How do we handle this in our logic? There are multiple options.
   - Consider definitions purely metamathematically and treat a definition like $f(x) := 2x$ just as a shorthand to the reader. This is among the simpler options, but comes with issues. When we define a function $f$ as above, we want to be able to treat it as an object on its own. But if $f(x) := 2x$ is just a replacement rule, $f$ on its own makes no sense mathematically. This can be taken care of by introducing extra syntax where $f(x) := 2x$ is, on its own, a shorthand for $f := x mapsto 2x$, which is mathematically coherent.
@@ -457,5 +465,19 @@ So far, no way of actually incorporating terms in formulas has been constructed,
   We will mostly stick to option 1. Whenever a new "type" of definition appears, like for relations or functions, we will quickly take note of it. However, one more problem arises: many mathematical definitions take the form of "define $dv(t)$ as the unique $dv(x)$ such that $dv(P)(rx)$". This does not translate to any term on its own --- in notation, we know something along the lines of $exists(x) rP(rx) conj forall(y) rP(ry) imp ry = rx$ (which we will soon use as the definition of unique existence), but we cannot name that $rx$ in any term. A simple solution: Prepend every #n[proposition] $dv(Q)$ considered after to turn it into $forall(t) rP(rt) imp rQ$. Now every occurrence of $rt$ is known to satisfy its property and it can be proven to be unique in it from context.
 
   There are also more logical approaches that allow you to directly name the object $rt$ with _description operators_ - denote such an operator by $iota$, then $iota_(rx)(rP)$ would refer to the #n[term] $t$ and be well-defined due to the unique existence. However, such operators can have surprisingly far-reaching logical consequences (for example, imply the axiom of choice as in @bourbaki-sets).
-]
 
+  From now on, we will use $defiff$ and $defeq$ for definitions of #n[propositions] and #n[terms] respectively. If we are given $dv(P) defiff dv(Q)$, $dv(t) defeq dv(s)$, then $rP iff rQ$ and $rt = rs$ hold by #lk(<eq.refl>)[reflexivity]#justifyt(<iff.refl>).
+]<handle-definitions>
+
+#let exists1(x) = $#lk(<exists1>, $#sym.exists !$) dv(#x).$
+
+#definition(title: [Unique existence])[
+    Let $dv(P)(dv(x))$ be a #n[proposition] in which (next to other variables) $rx$ might appear. Then we set
+    $ exists1(x) rP(rx) defiff exists(x) rP(rx) conj (forall(y) rP(ry) imp ry = rx). $
+]<exists1>
+#proposition(title: [Unique existence of equality])[
+  For every #n[term] $dv(t)$ we have $exists1(x) rt = rx$.
+]
+#proof[
+  Use $dv(t)$, then clearly, $rt=rt$#justifyt(<eq.refl>). It remains to show#justifyt(<exists1>) that #n[for all] $dv(y)$ with $rt = ry$, we have $ry = rt$. But that follows from #lk(<eq.symm>)[symmetry].
+]

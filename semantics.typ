@@ -15,8 +15,11 @@
     x
   })
 }
+
 #let strify(content) = if type(content) == str {
   content
+} else if type(content) == int {
+  str(content)
 } else if content.has("text") {
   content.text
 } else if content.has("body") {
@@ -25,11 +28,20 @@
   strify(content.child)
 }
 #let name(label, word, plural: false) = names(label, (word), plural)
-#let refname(word, instead) = context link(math_names.get().at(lower(strify(word))), text(rgb(60,0,60),(if instead != none {
+#let refname(word, instead) = context {
+  let st = strify(word)
+  if type(st) != str {
+    panic(repr(word) + "could not be stringified!!!")
+  }
+  let w = math_names.get().at(lower(strify(word)), default: none) 
+if w != none {
+ link(w, text(rgb(60,0,60),(if instead != none {
   instead
 } else {
   word
-})))
+}))) } else {
+  panic(lower(strify(word)) + " has not been defined! instead:" + repr(instead))
+}}
 #let n(w) = refname(w, none)
 #let nn(w, ctx) = refname(strify(ctx)+"."+strify(w),w)
 #let def(label, definiens, verbatim: false) = {
@@ -71,8 +83,16 @@
 
 /// declare var
 #let dv(var) = [#metadata((var: repr(var))) #text(rgb(90,10,10),var)]
+/// declare assumption
+#let das(num,asm) = $#metadata((var: strify(num)))#sub[#text(green.darken(60%))[#int(strify(num))]]#asm$
 /// reference var
 #let rv(var) = context refvar(repr(var),var, none)
+#let ras(num, asm) = context refvar(strify(num),asm, none)
+#let justifytas1(num, comment: none) = context {
+  text(green.darken(60%),super(refvar(strify(num),"(" + str(num) + ")",none)) + if comment != none {
+    footnote(comment)})}
+#let justifytas(..args, comment: none) = context args.pos().map(justifytas1).join()
+
 
 //#show math.text: it2 => if it2 == [S] {[T]} else {it2}
 /// keep referencing var in equation, only works for single letter stuff due to typst not having any actually decent query features
