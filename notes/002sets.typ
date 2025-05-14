@@ -134,4 +134,19 @@ Lots of constructions that go through with #n[sets] also work with #n[classes], 
 
   For example it does not matter that a #n[ordered pair] of $dv(x),dv(y)$ is defined as $upair(singleton(rx), upair(rx,ry))$ and indeed, we will almost never see that #n[term] again. What we care about instead is that we _can_ always construct an #n[ordered pair] and that it is already determined by its two components.
 ]
-==== Union
+
+==== Union  
+#axiom(title: [Axiom of unions])[
+  For #n[every] #n[set] $dv(x)$, the #n[class] $classcompr(a, exists(y) ry mem rx conj ra mem ry)$ is a #n[set].
+]<set.ax-union>
+#let setUnion(a) = link(<set.Union>)[$union.big #a$]
+#definition(title: "Union of a set")[
+  For #n[every] #n[set] $dv(x)$, define the #n[set] we call its #def(<set.Union>)[union] as $ setUnion(rx) defeq classcompr(a, exists(y) ry mem rx conj ra mem ry). $
+]
+#names(<set.Union>, "union of a set", "union.set")
+#proof(title: "Proof of well-definedness")[Well-defined due to the #lk(<set.ax-union>)[axiom of unions].]
+#let union = link(<set.union>)[$union$]
+#definition(title: "Union of two sets")[
+  For #n[all] #n[sets] $dv(x), dv(y)$, define the #n[set] we call their #def(<set.union>)[union] (or _binary union_) as $ rx union ry defeq setUnion(upair(rx,ry)). $
+]
+#names(<set.union>, "binary union", "union")
