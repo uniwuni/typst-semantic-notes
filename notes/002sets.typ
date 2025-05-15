@@ -147,6 +147,67 @@ Lots of constructions that go through with #n[sets] also work with #n[classes], 
 #proof(title: "Proof of well-definedness")[Well-defined due to the #lk(<set.ax-union>)[axiom of unions].]
 #let union = link(<set.union>)[$union$]
 #definition(title: "Union of two sets")[
-  For #n[all] #n[sets] $dv(x), dv(y)$, define the #n[set] we call their #def(<set.union>)[union] (or _binary union_) as $ rx union ry defeq setUnion(upair(rx,ry)). $
+  For #n[all] #n[sets] $dv(x), dv(y)$, define the #n[set] we call their #def(<set.union>)[undenote ion] (or _binary union_) as $ rx union ry defeq setUnion(upair(rx,ry)). $
 ]
 #names(<set.union>, "binary union", "union")
+#proposition(title: [Membership in a binary union])[
+  Let $dv(x), dv(y), dv(a)$ be #n[sets]. Then $ ra mem rx union ry iff (ra mem rx disj ra mem ry). $
+]<set.union.mem-iff>
+#proof[
+  $ ra mem rx union ry &#justify(<set.union>,iff) ra mem setUnion(upair(rx,ry))
+    \ &#justify(<set.Union>,iff) exists(z) rz mem upair(rx,ry) conj ra mem rz 
+    \ &#justify(<unordered-pair.mem-iff>,iff) exists(z) (rz = rx disj rz = ry) conj ra mem rz 
+    \ &#justify(<exists.or>,iff)#justifyt(<and.or-distr>) ra mem rx disj ra mem ry.
+    $
+]
+#let compr(x,A,P) = ${dv(#x) mem #A #link(<set.separation>,$mid(|)$) #P}$
+#let compr1(x,P) = ${dv(#x) #link(<set.separation>,$mid(|)$) #P}$
+
+#axiom(title: [Axiom schema of separation])[
+  Let $dv(x)$ be a #n[set] and $dv(P)(a)$ a #n[proposition]. Then, the #n[class] $ classcompr(a,ra mem rx conj P(ra)) $ is a #n[set].
+]<set.ax-separation>
+#definition(title: [Separation])[
+  Let $dv(x)$ be a #n[set] and $dv(P)(a)$ a #n[proposition]. Then, we define the #def(<set.separation>)[set given by separation by $rP$ from $rx$] as 
+  $ compr1(a,ra mem rx conj rP(rx)) defeq compr(a,rx, rP(rx)) defeq classcompr(a, ra mem rx conj rP(rx)) $
+]
+#names(<set.separation>, "separation", "comprehension")
+#proposition(title: [Separation properties])[
+  For all #n[propositions] $dv(P)(x)$ that define a #n[set] and any other ones $dv(Q)(x)$ as well as a #n[set] $dv(x)$, we have 
+  + $compr(a,compr1(a, rP(ra)), rQ(ra)) = compr1(a, rP(ra) conj rQ(ra))$, <set.separation.assoc>
+  + $compr1(a, ra mem rx) = rx$ <set.separation-mem>.
+]
+#proof[
+  + Follows#justifyt(<set.ext>) from 
+    $ dv(b) mem compr(a,compr1(a, rP(ra)), rQ(ra)) iff  b mem compr1(a, rP(ra)) conj rQ(rb) iff rP(rb) conj rQ(rb) iff rb mem compr1(a, rP(ra) conj rQ(ra)). $
+  + Follows immediately from #n[extensionality].
+]
+#let emptyset = $#link(<set.empty>)[$emptyset$]$
+#definition(title: [Empty set])[
+  Let $dv(x)$ be #n[any] #n[set]. Then, we define the #def(<set.empty>)[empty set] as 
+  $ emptyset defeq compr(a,rx, fls). $
+  A #n[set] is _empty_ iff it is #n[equal] to $emptyset$ and #def(<set.nonempty>)[nonempty] #n[iff] it is #n[not].
+]
+#proof(title: "Justification")[
+  The definition is independent of $rx$:
+  $ b mem emptyset #justify(<set.empty>,iff) b mem compr(a,rx, fls) #justify(<set.separation>, iff) (b mem a conj fls) #justify(<and.true-false>, iff) fls $
+]
+#names(<set.empty>, "empty", "empty set")
+#names(<set.nonempty>, "nonempty", "nonempty set","not empty")
+#proposition(title: "Properties of the empty set")[
+  For #n[all] #n[sets] $dv(x)$, we have the following:
+  + $rx nmem emptyset$, <set.empty.nmem>
+  + $rx$ is #n[empty] #n[iff] $forall(a) ra nmem rx$, <set.empty.iff>
+  + $rx$ is #n[nonempty] #n[iff] there is an $dv(a) mem rx$. <set.nonempty-iff>
+]
+#proof[
+  + By #lk(<set.empty>)[definition], $rx mem emptyset$ #n[implies] $fls$.
+  + Left-to-right follows from #lk(<set.empty.nmem>)[the previous part]. So assume $forall(a) ra nmem rx$.
+    Then, $ forall(a) ra mem rx imp fls #justify(<false.elim>,iff) iff forall(a) ra mem rx iff fls #justify(<set.empty.iff>, iff) forall(a) ra mem rx iff ra mem emptyset. $
+  + $rx$ is #n[nonempty] #n[iff] it is #n[not] #n[empty], e.g. 
+    $neg forall(a) ra nmem rx #justify(<exists.not-all>, iff)#justifyt(<not.not-iff>) exists(a) ra mem rx$.
+]
+
+#definition(title: [Sets of given elements])[
+  For #n[all] #n[sets] $dv(a)_1, dots, ra_dv(n)$ (metamathematically quantifying over $rn$), we define the #def<set.finite-list>)[set given by enumeration of elements]
+
+]

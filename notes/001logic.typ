@@ -194,7 +194,7 @@
   / Idempotence: $(rP disj rP) iff rP$, <or.self>
   / Commutativity: $(rP disj rQ) iff (rQ disj rP)$, <or.comm>
   / Associativity: $(rP disj (rQ disj rR)) iff ((rP disj rQ) disj rR)$,<or.assoc>
-  / Conjunction Distributivity: $rP disj (rQ conj rR) iff ((rP disj rQ) conj (rP disj rR))$ <or.and-assoc> and $rP conj (rQ disj rR) iff ((rP conj rQ) disj (rP conj rR))$, <and.or-assoc>
+  / Conjunction Distributivity: $rP disj (rQ conj rR) iff ((rP disj rQ) conj (rP disj rR))$ <or.and-distr> and $rP conj (rQ disj rR) iff ((rP conj rQ) disj (rP conj rR))$, <and.or-distr>
   / Absorption Laws: $(rP disj (rP conj rQ)) iff rP$ <or.and-absorb>, $(rP conj (rP disj rQ)) iff rP$, <and.or-absorb>
   / Disjunction, implication and conjunction: $((rP disj rQ) imp rR) iff ((rP imp rR) and (rQ imp rR))$.
   ]
