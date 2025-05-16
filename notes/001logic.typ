@@ -333,6 +333,9 @@ This axiom has rather far reaching consequences in that, unlike the other rules 
   )
   We can see that this #n[statement] is true unless $rP$ is #n[false] and $rQ$ is #n[true] and in particular, it is not tautological.
 ]
+#remark(title: [Nullary operations])[
+  Sometimes, #n[propositions] such as $dv(P)_1 disj dots disj rP_dv(n)$ are considered. If $n = 0$, one defines this as #n[false], and similarly $rP_1 conj dots conj rP_rn$ is #n[true] to not violate #lk(<or.assoc>)[associativity].
+]
 === First-Order Logic
 The logic previously described clearly does not suffice to do any "serious" mathematics in --- it has no notion of equality, and does not allow for #n[statements] about any _objects_, 
 only about other #n[propositions]. Hence, we introduce quantifiers. These require a notion of term variable

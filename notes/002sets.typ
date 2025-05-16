@@ -67,7 +67,7 @@ Lots of constructions that go through with #n[sets] also work with #n[classes], 
 #definition(title: "Unordered pair")[
   For #n[all] #n[sets] $dv(x),dv(y)$, define the #n[set] we call their #def(<unordered-pair>)[unordered pair] as $ {rx,ry} defeq classcompr(a, ra = rx disj ra = ry). $ Also define the #def(<set.singleton>)[singleton #n[set]] ${rx}$ containining $rx$ as $upair(rx,rx)$.
 ]
-#names(<unordered-pair>, "unordered pair")
+#names(<unordered-pair>, plural: true, "unordered pair")
 #names(<set.singleton>, "singleton")
 #proof(title: "Proof of well-definedness")[
   #n[For any] #n[sets] $dv(x), dv(y)$, $upair(x,y)$ is a #n[set] due to the #lk(<set.ax-pairing>)[axiom of pairing]. It is unique since it is defined by a #n[class]#justifyt(<set.to-class>). This also implies the well-definedness of $singleton(x)$. 
@@ -135,7 +135,7 @@ Lots of constructions that go through with #n[sets] also work with #n[classes], 
   For example it does not matter that a #n[ordered pair] of $dv(x),dv(y)$ is defined as $upair(singleton(rx), upair(rx,ry))$ and indeed, we will almost never see that #n[term] again. What we care about instead is that we _can_ always construct an #n[ordered pair] and that it is already determined by its two components.
 ]
 
-==== Union  
+==== Union 
 #axiom(title: [Axiom of unions])[
   For #n[every] #n[set] $dv(x)$, the #n[class] $classcompr(a, exists(y) ry mem rx conj ra mem ry)$ is a #n[set].
 ]<set.ax-union>
@@ -147,7 +147,7 @@ Lots of constructions that go through with #n[sets] also work with #n[classes], 
 #proof(title: "Proof of well-definedness")[Well-defined due to the #lk(<set.ax-union>)[axiom of unions].]
 #let union = link(<set.union>)[$union$]
 #definition(title: "Union of two sets")[
-  For #n[all] #n[sets] $dv(x), dv(y)$, define the #n[set] we call their #def(<set.union>)[undenote ion] (or _binary union_) as $ rx union ry defeq setUnion(upair(rx,ry)). $
+  For #n[all] #n[sets] $dv(x), dv(y)$, define the #n[set] we call their #def(<set.union>)[union] (or _binary union_) as $ rx union ry defeq setUnion(upair(rx,ry)). $
 ]
 #names(<set.union>, "binary union", "union")
 #proposition(title: [Membership in a binary union])[
@@ -160,6 +160,7 @@ Lots of constructions that go through with #n[sets] also work with #n[classes], 
     \ &#justify(<exists.or>,iff)#justifyt(<and.or-distr>) ra mem rx disj ra mem ry.
     $
 ]
+==== Separation
 #let compr(x,A,P) = ${dv(#x) mem #A #link(<set.separation>,$mid(|)$) #P}$
 #let compr1(x,P) = ${dv(#x) #link(<set.separation>,$mid(|)$) #P}$
 
@@ -208,6 +209,77 @@ Lots of constructions that go through with #n[sets] also work with #n[classes], 
 ]
 
 #definition(title: [Sets of given elements])[
-  For #n[all] #n[sets] $dv(a)_1, dots, ra_dv(n)$ (metamathematically quantifying over $rn$), we define the #def<set.finite-list>)[set given by enumeration of elements]
-
+  For #n[all] #n[sets] $dv(x)_1, dots, rx_dv(n)$ (metamathematically quantifying over $rn$), we define the #def(<set.finite-list>)[set given by enumeration of elements] ${rx_1, dots, rx_rn}$:
+  - for $rn = 0$, set ${rx_1, dots, rx_rn} defeq emptyset$,
+  - otherwise, ${rx_1,dots,rx_rn} defeq {rx_1,dots,rx_(rn-1)} union singleton(rx_rn).$
 ]
+#remark[
+  For $rn = 2$, this clashes with the notation for #n[unordered pairs], but we will see that the denoted #n[sets] agree so it cannot cause any issues.
+]
+#names(<set.finite-list>, "set given by the elements")
+#let finset(..args) = $#link(<set.finite-list>,${$) #args.pos().join([, ])#link(<set.finite-list>,$}$)$
+
+#proposition(title: [Membership in set of given elements])[
+  For #n[all] #n[sets] $dv(a),dv(x)_1, dots, rx_dv(n)$, we have 
+  $ ra mem finset(rx_1, dots, rx_rn) iff ra = rx_1 disj dots disj ra = rx_rn. $
+]<set.finite-list.mem-iff>
+#proof[
+  By metamathematical induction on $rn$:
+  + For $rn=0$, we need#justifyt(<set.finite-list>) to show $ra mem emptyset iff fls$. But this is clear.#justifyt(<set.empty.nmem>).
+  + For $rn > 0$, we need#justifyt(<set.finite-list>) to show 
+  $ ra mem finset(rx_1,dots,rx_(rn-1)) union singleton(rx_rn) iff ra = rx_1 disj dots disj ra = rx_rn. $
+  So consider the induction hypothesis $das(1, ra mem finset(rx_1, dots, rx_(rn-1)) iff ra = rx_1 disj dots disj ra = rx_(rn-1))$: Then, we have
+   $ ra mem finset(rx_1,dots,rx_(rn-1)) union singleton(rx_rn) &#justify(<set.union.mem-iff>, iff) ra mem finset(rx_1,dots,rx_(rn-1)) disj ra mem singleton(rx_rn)
+   \ #justifytas1(1)&#justify(<set.singleton.mem-iff>, iff) (ra = rx_1 disj dots disj ra = rx_(rn-1)) disj ra = rx_rn
+   \ &#justify(<or.assoc>,iff)
+   ra = rx_1 disj dots disj ra = rx_rn. $
+]
+==== Intersections
+#let setIntersection(a) = link(<set.Intersection>)[$inter.big #a$]
+#definition(title: "Intersection of a set")[
+  For #n[every] #n[nonempty] #n[set] $dv(x)$ with #n[element] $dv(c)$, define the #n[set] we call its #def(<set.Intersection>)[intersection] as $ setIntersection(rx) defeq compr(a, rc, forall(y) ry mem rx imp ra mem ry). $ If $dv(x)$ is #n[empty], depending on context $setIntersection(x)$ may be defined as the "surrounding universe".
+]
+#names(<set.Intersection>, "intersection of a set", "intersection.set")
+#proposition(title: [Membership in a binary union])[
+  Let $dv(x)$ be a #n[nonempty] #n[set] with #n[element] $dv(c)$. Then #n[for all] $dv(a)$, $ ra mem setIntersection(rx) iff (forall(b) rb mem rx imp ra mem rb) $
+]<set.Intersection.mem-iff>
+#proof[
+  We have#justifyt(<set.Intersection>)
+  $ ra mem setIntersection(rx) &iff (ra mem rc conj forall(b) rb mem rx imp ra mem rb) \ &iff ((rc mem rx imp ra mem rc) conj forall(b) rb mem rx imp ra mem rb) \ &iff forall(b) rb mem rx imp ra mem rb. $
+]
+
+#let inter = link(<set.inter>)[$inter$]
+#definition(title: "Intersection of two sets")[
+  For #n[all] #n[sets] $dv(x), dv(y)$, define the #n[set] we call their #def(<set.inter>)[intersection] (or _binary intersection_) as $ rx inter ry defeq setIntersection(upair(rx,ry)). $
+]
+#names(<set.inter>, "binary intersection", "intersection")
+#proposition(title: [Membership in a binary intersection])[
+  Let $dv(x), dv(y), dv(a)$ be #n[sets]. Then $ ra mem rx inter ry iff (ra mem rx conj ra mem ry). $
+]<set.inter.mem-iff>
+#proof[
+  $ ra mem rx inter ry &#justify(<set.inter>,iff) ra mem setIntersection(upair(rx,ry))
+    \ &#justify(<set.Intersection>,iff) forall(z) rz mem upair(rx,ry) imp ra mem rz 
+    \ &#justify(<unordered-pair.mem-iff>,iff) forall(z) (rz = rx disj rz = ry) imp ra mem rz 
+    \ &#justify(<or.elim>,iff) forall(z) (rz = rx imp ra mem rz) conj (rz = ry imp ra mem rz) 
+    \ &#justify(<all.and>,iff)ra mem rx conj ra mem ry.
+    $
+]
+#proposition(title: [Properties of union and intersection])[
+  For all #n[sets] $dv(x), dv(y), dv(z)$ we have
+  + $rx union rx = rx$<set.union.self>, $rx inter rx = rx$<set.inter.self>,
+  + $rx union ry = ry union rx$<set.union.comm>, $rx inter ry = ry inter rx$<set.inter.comm>,
+  + $rx union (ry union rz) = (rx union ry) union rz$<set.union.assoc>, $rx inter (ry inter rz) = (rx inter ry) inter rz$<set.inter.assoc>,
+  + $rx union (ry inter rz) = (rx union ry) inter (rx union rz)$<set.union.inter-distr>, $rx inter (ry union rz) = (rx inter ry) union (rx inter rz)$<set.inter.union-distr>,
+  + $rx union (rx inter ry) = rx$<set.union.inter-absorb>, $rx inter (rx union ry) = rx$<set.inter.union-absorb>,
+  + $rx union emptyset = rx$<set.union.empty>.
+]
+#proof[
+  Use #n[extensionality] and the following #n[biconditionals]:
+  + Idempotency of #lk(<or.self>)[or], #lk(<and.self>)[and],
+  + commutativity of #lk(<or.comm>)[or], #lk(<and.comm>)[and],
+  + associativity of #lk(<or.assoc>)[or], #lk(<and.assoc>)[and],  
+  + distributivity of #lk(<or.and-distr>)[or over and], #lk(<and.or-distr>)[and over or],  
+  + absorption of #lk(<or.and-absorb>)[or over and], #lk(<and.or-absorb>)[and over or],
+  + #n[disjunction] with #n[absurdity] #justifyt(<or.true-false>).]
+
+We try to save most facts about the "big operators" for later when we introduce them for families of #n[sets], which tends to be the substantially more common mode of usage in mathematical practice.
