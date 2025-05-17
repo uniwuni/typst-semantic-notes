@@ -312,7 +312,9 @@ This axiom has rather far reaching consequences in that, unlike the other rules 
   / Double #n[negation] collapse: $rP iff neg neg rP$ <not.not-iff>,
   / Converses: $(rP imp rQ) iff (neg rQ imp neg rP)$ <imp.converse>,
   / Proof by contradiction: $(neg rP imp rP) imp rP$ <not.contradiction>,
-  / Discreteness of #n[propositions]: $(rP iff tru) disj (rP iff fls)$ <propositions-discrete>.
+  / Discreteness of #n[propositions]: $(rP iff tru) disj (rP iff fls)$ <propositions-discrete>,
+  / De-Morgan for #n[disjunction]: $neg(rP disj rQ) iff (neg rP conj neg rQ)$<not.or>,
+  / De-Morgan for #n[conjunction]: $neg(rP conj rQ) iff (neg rP disj neg rQ)$<not.and>.  
 ]
 #proof[
   + One direction has #lk(<not.not-of>)[already been shown]. For $neg neg rP imp rP$, use #n[excluded middle] and consider the cases $rP, neg rP$:
@@ -320,6 +322,12 @@ This axiom has rather far reaching consequences in that, unlike the other rules 
   + One direction has #lk(<imp.converse1>)[already been shown]. Now assume $neg rQ imp neg rP$. By the #lk(<imp.converse1>)[proven direction], we can see that $neg neg rP imp neg neg rQ$. Rewrite to $rP imp rQ$#justifyt(<not.not-iff>)#justifyt(<imp.congr>).
   + We #n[equivalently]#justifyt(<not.not-iff>)#justifyt(<imp.congr>) show $(neg rP imp rP) imp neg neg rP$. Assume $neg rP imp rP, neg rP$. Then, by #n[modus ponens], $rP$ follows, which is #n[absurd]#justifyt(<and.absurd>).
   + Rewrite to $rP disj neg rP$#justifyt(<iff.true>)#justifyt(<iff.false>) and use #n[excluded middle].
+  + For left-to-right assume $neg(rP disj rQ)$. If $rP$ were true, so would $rP disj rQ$ be#justifyt(<or.intro>), hence $neg rP$ and similarly $neg rQ$, such that $neg rP conj neg rQ$#justifyt(<and.intro>).
+   
+   Now assume $neg rP, neg rQ, rP disj rQ$. If $rP$ holds, we arrive at a #n[contradiction], if $rQ$ holds, we do to. Hence $rP disj rQ$ cannot be #n[true] and we are done.
+  + First assume $neg(rP conj rQ)$. Use #n[excluded middle] on $rP$:
+    + if $rP$ holds, we show $neg rQ$: from $rQ$ we could derive#justifyt(<and.intro>) $rP conj rQ$, #n[contradiction]. Hence#justifyt(<or.intro>) $neg rP disj neg rQ$.
+    + if $neg rP$ holds, $neg rP disj neg rQ$ immediately follows#justifyt(<or.intro>).
 ]
 #remark(title: [Truth tables])[
   The #lk(<propositions-discrete>)[discreteness property] allows us to check validity of #n[statements] (in some variables) very easily (though the method is computationally expensive): just enumerate all the possible cases. For example, we wish to check whether for all #n[propositions] $dv(P), dv(Q)$, $neg rP imp ((rP disj rQ) iff (rP conj rQ))$ is a #n[tautology], so let us consider a table:
@@ -348,7 +356,7 @@ basic rules of replacement of terms as given.
 #def(<term>)[Terms] in general are an undefined sort that in particular include term variables. 
 ]
 #names(<term>, plural:true, "term", "object")
-=== Quantifiers
+==== Quantifiers
 #let forall(x) = $#lk(<all>, math.forall) dv(#x).$
 #definition(title: "Universal quantification")[
   Let $dv(P)(dv(x))$ be a #n[proposition] in which (next to other variables) $rx$ might appear.
@@ -442,6 +450,7 @@ So far, no way of actually incorporating terms in formulas has been constructed,
   / Substitution: for all #n[terms] $dv(t), dv(s)$ with $rt = rs$ and any #n[proposition] $dv(P)(rt)$ that #n[holds] and in which $rt$ appears, any instance of $rt$ can be replaced by $rs$ and it still #n[holds]. <eq.subst>
 ]
 #show "=": it => link(<eq>,$=$)
+#let neq = link(<eq>,$eq.not$)
 #names(<eq>, "equals", "same", "identical", "identity", "equal",
       "identities", "equalities", "equation")
 

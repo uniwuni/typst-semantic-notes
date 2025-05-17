@@ -283,3 +283,156 @@ Lots of constructions that go through with #n[sets] also work with #n[classes], 
   + #n[disjunction] with #n[absurdity] #justifyt(<or.true-false>).]
 
 We try to save most facts about the "big operators" for later when we introduce them for families of #n[sets], which tends to be the substantially more common mode of usage in mathematical practice.
+
+==== Subsets
+#let ssubset = $#link(<ssubset>,$subset.neq$)$
+#let subset = $#link(<subset>,$subset.eq$)$
+#definition(title: "Subsets")[
+  Let $dv(x),dv(y)$ be #n[sets]. Then, we set 
+  $ rx subset ry &defiff (forall(a) ra mem rx imp ra mem ry), \
+    rx ssubset ry &defiff rx subset ry conj rx neq ry.
+   $
+The former we read as "$rx$ is a #def(<subset>)[subset] of $ry$", the latter as "$rx$ is a #def(<ssubset>)[strict subset] of $ry$".
+]
+#names(<subset>, "subset", "subsets", "included", "part")
+#names(<ssubset>, "strict subset", "proper subset")
+#proposition(title: "Basic subset properties")[
+  #n[For any] #n[sets] $dv(x), dv(y), dv(z)$ we have the following:
+  + $rx subset rx$<subset.refl>,
+  + $rx subset ry imp ry subset rx imp rx = ry$<subset.antisymm>,
+  + $ry subset rz imp rx subset ry imp rx subset rz$<subset.trans>,
+  + $rx ssubset ry iff (rx subset ry conj neg (ry subset rx)) iff (rx subset ry conj exists(a) a mem ry conj a nmem rx)$<ssubset.iff-subset-not-subset>,
+  + $neg rx ssubset rx$<ssubset.irrefl>,
+  + $rx ssubset ry imp neg ry subset rx$<ssubset.asymm-subset>,
+  + $rx ssubset ry imp neg ry ssubset rx$<ssubset.asymm>,
+  + $ry ssubset rz imp rx subset ry imp rx ssubset rz$<ssubset.trans-subset-right>,
+  + $ry subset rz imp rx ssubset ry imp rx ssubset rz$<ssubset.trans-subset-left>,
+  + $ry ssubset rz imp rx ssubset ry imp rx ssubset rz$<ssubset.trans>,
+  + $emptyset subset rx$<set.empty.subset>,
+  + $rx subset emptyset iff rx = emptyset$<set.empty.eq-iff-subset>.
+]
+#proof[
+  + We need to show $forall(a) ra mem rx imp ra mem rx$, but that is trivial.
+  + From #n[extensionality]: For #n[any] $dv(a)$ we need to show $ra mem rx iff ra mem ry$. But $ra mem rx imp ra mem ry$ follows from $rx subset ry$, and $ra mem ry imp ra mem rx$ follows from $ry subset rx$#justifyt(<subset>)#justifyt(<all.elim>).
+  + Assume $dv(a) mem rx$. Then from $rx subset ry$ we know#justifyt(<subset>) $ra mem ry$ and from $ry subset rz$ we know $ra mem rz$.
+  + We show $1 imp 2 imp 3 imp 1$.
+    + Assume $rx ssubset ry$. Then $rx subset ry$ follows from #lk(<ssubset>)[definition]. Now if $ry subset rx$ were true, by the shown #lk(<subset.antisymm>)[antisymmetry] we would have $rx = ry$ in contradiction to $rx neq ry$.
+    + Assume $rx subset ry, not (ry subset rx)$. It remains to be shown that there #n[exists] some $dv(a)$ with $ra mem ry, ra nmem rx$. If that were not true, every $dv(a)$ with $ra mem ry$ would fulfill $ra mem rx$ and $ry subset rx$, #n[contradiction].
+    + Assume $rx subset ry$ and $dv(a) mem ry, ra nmem rx$. We have to show $rx subset ry$ (clear) and $rx neq ry$. But if $rx = ry$, we would have $ra mem ry = rx$, #n[contradiction].
+  + Assume $rx ssubset rx$. Then in particular, $rx neq rx$, in #n[contradiction] to #lk(<eq.refl>)[reflexivity].
+  + Assume $rx ssubset ry, ry subset rx$. Then, $rx subset ry, ry subset rx$ so due to #lk(<subset.antisymm>)[antisymmetry] we have $rx = ry$, in #n[contradiction] due to $rx neq ry$ following from $rx ssubset ry$.
+  + Follows from #lk(<ssubset.asymm-subset>)[the above] due to $rx ssubset ry imp rx subset ry$.
+  + Assume $ry ssubset rz, rx subset ry$. We need to show $rx subset rz$, $rx neq rz$. The former follows from $ry subset rz, rx subset ry$ which we know from our assumptions.#justifyt(<ssubset>) Now let $rx = rz$. Then $rx subset ry ssubset rx$, which #lk(<ssubset.asymm-subset>)[we know] cannot hold. #n[Contradiction].
+  + Assume $ry subset rz, rx ssubset ry$. We need to show $rx subset rz$, $rx neq rz$. The former follows from $ry subset rz, rx subset ry$ which we know from our assumptions.#justifyt(<ssubset>) Now let $rx = rz$. Then $ry subset rx ssubset ry$, which #lk(<ssubset.asymm-subset>)[we know] cannot hold. #n[Contradiction].
+  + Assume $ry ssubset rz, rx ssubset ry$. Then we have $rx subset ry$ and from the #lk(<ssubset.trans-subset-left>)[above] we can see $rx ssubset rz$.
+  + Assume $dv(a) mem emptyset$. #n[Contradiction].
+  + Right-to-left follows from #lk(<subset.refl>)[reflexivity], left-to-right from #lk(<subset.antisymm>)[antisymmetry] and the #lk(<set.empty.subset>)[previous statement].
+]
+#proposition(title: "Subsets and operations")[
+  #n[For any] #n[sets] $dv(x), dv(y), dv(z)$ we have the following:
+  + $rx subset rx union ry, ry subset rx union ry$<set.union.subset>,
+  + $rx inter ry subset rx, rx inter ry subset ry$<set.inter.subset>,
+  + $rx subset ry imp rx union rz subset ry union rz$<set.union.mono>,
+  + $rx subset ry imp rx inter rz subset ry inter rz$<set.inter.mono>,
+  + $rx subset ry iff rx union ry = ry$<set.union.eq-iff-subset>,
+  + $rx subset ry iff rx inter ry = rx$<set.inter.eq-iff-subset>,
+  + $rx subset ry imp setUnion(rx) subset setUnion(ry)$<set.Union.mono>,
+  + $rx subset ry imp setIntersection(ry) subset setIntersection(rx)$<set.Inter.mono> for #n[nonempty] $rx,ry$.
+]
+#proof[
+  + $ dv(a) mem rx &#justify(<or.intro>,imp) ra mem rx disj ra mem ry #justify(<set.union.mem-iff>,iff) ra mem rx union ry, \
+  dv(a) mem ry &#justify(<or.intro>,imp) ra mem rx disj ra mem ry #justify(<set.union.mem-iff>,iff) ra mem rx union ry. $ 
+  + $ dv(a) mem rx inter ry &#justify(<set.inter.mem-iff>,iff) ra mem rx conj ra mem ry #justify(<and.elim>,imp) ra mem rx, \
+  dv(a) mem rx inter ry &#justify(<set.inter.mem-iff>,iff) ra mem rx conj ra mem ry #justify(<and.elim>,imp) ra mem ry. $
+  + Assume $rx subset ry$. Then 
+   $ dv(a) mem rx union rz #justify(<set.union.mem-iff>,iff) ra mem rx disj ra mem rz #justify(<or.map>, imp) ra mem ry disj ra mem rz #justify(<set.union.mem-iff>,iff) ra mem ry union rz. $
+  + Assume $rx subset ry$. Then 
+   $ dv(a) mem rx inter rz #justify(<set.inter.mem-iff>,iff) ra mem rx conj ra mem rz #justify(<and.map>, imp) ra mem ry conj ra mem rz #justify(<set.inter.mem-iff>,iff) ra mem ry inter rz. $
+  + First assume $rx subset ry$.    
+    From #lk(<set.union.subset>)[a previous statement] and #lk(<subset.antisymm>)[antisymmetry], it suffices to prove $rx union ry subset ry$. But by #lk(<set.union.mono>)[monotony], we have $rx union ry subset ry union ry #justify(<set.union.self>, $=$) ry$. Now assume $rx union ry = ry$. Then, $rx #justify(<set.union.subset>,subset) rx union ry = ry$.
+  + First assume $rx subset ry$. From #lk(<set.inter.subset>)[a previous statement] and #lk(<subset.antisymm>)[antisymmetry], it suffices to prove $rx subset rx inter ry$. But by #lk(<set.union.mono>)[monotony], we have $rx inter rx #justify(<set.inter.self>, $=$) rx subset rx inter ry$. Now assume $rx inter ry = ry$. Then $ry = rx inter ry #justify(<set.inter.subset>,subset) rx$.
+  + Let $rx subset ry$ and $dv(a) mem setUnion(rx)$, i.e.#justifyt(<set.Union>) $ra mem dv(b) mem rx$. Then $rb mem ry$, hence#justifyt(<set.Union>) $ra mem setUnion(ry)$.
+  + Let $rx subset ry$ and $dv(a) mem setIntersection(ry)$, i.e.#justifyt(<set.Intersection.mem-iff>) $forall(b) rb mem ry imp ra mem rb$. We need to show#justifyt(<set.Intersection.mem-iff>) $forall(b) rb mem rx imp ra mem rb$. But for #n[any] $dv(b)$, $rb mem rx$ #n[implies] $rb mem ry$ such that $ra mem rb$.    
+]
+==== Set differences
+#let without = link(<set.difference>,$without$)
+#definition(title: "Set difference")[
+  Let $dv(x), dv(y)$ be #n[sets]. Then, the #def(<set.difference>)[difference set] $rx without ry$ is defined as 
+  $ rx without ry defeq compr(a,rx,ra nmem ry). $
+]
+#names(<set.difference>, plural: true, "difference set", "set difference", "relative complement")
+#proposition(title: "Set difference properties")[
+  #n[For all] #n[sets] $dv(x), dv(y), dv(z)$, we have 
+  + $rx without ry = emptyset iff rx subset ry$<set.difference.empty-iff>,
+  + $rx without rx = emptyset$<set.difference.self>,
+  + $emptyset without rx = emptyset$<set.difference.empty-left>,
+  + $rx without ry subset rx$<set.difference.subset>,
+  + $rx inter ry = emptyset iff rx without ry = rx$<set.difference.empty-iff-disjoint>,
+  + $rx subset ry imp rx without rz subset ry without rz$<set.difference.mono>,
+  + $rx subset ry imp rz without ry subset rz without rx$<set.difference.anti>,
+  + $rx without (ry union rz) = (rx without ry) inter (rx without rz) =(rx without ry) without rz$<set.difference.union-right>,
+  + $rx without (ry inter rz) = (rx without ry) union (rx without rz)$<set.difference.inter-right>,
+  + $(rx union ry) without rz = (rx without rz) union (ry without rz)$<set.difference.union-left>,
+  + $(rx inter ry) without rz = (rx without rz) inter (ry without rz)$<set.difference.inter-left>,
+  + $rx without (ry without rx) = rx$<set.difference.difference>,
+  + $rx inter (ry without rz) = (rx inter ry) without (rx inter rz) = (rx inter ry) without rz$<set.inter.difference>,
+  + $rx union (ry without rz) = (rx union ry) without (rz without rx) = (rx union ry) without ((ry inter rz) without rx)$<set.union.difference>,
+  + $(rx without ry) union (rx inter ry) = rx, (rx without ry) inter (rx inter ry) = emptyset$<set.difference.disjoint-decomp>]
+#proof[
+  + If $rx without ry = emptyset$, we have#justifyt(<set.difference>) $neg(dv(a) mem rx conj ra nmem ry)$. Hence $ra mem rx imp ra mem ry$.
+   Similarly, #n[if] $rx subset ry$ and $dv(a) mem rx without ry$, we have#justifyt(<set.difference>) $ra mem rx, ra nmem ry$, but by assumption#justifyt(<subset>) $ra mem ry$, #n[contradiction].
+   So#justifyt(<set.empty.iff>) $rx without ry = emptyset$.
+  + Follows from #lk(<set.difference.empty-iff>)[the previous] and #lk(<subset.refl>)[reflexivity].
+ + Follows from #lk(<set.difference.empty-iff>)[the previous] and the #n[empty set] being a #n[subset] of #n[every] #n[set]#justifyt(<set.empty.subset>).
+ + $ dv(a) mem rx without ry #justify(<set.difference>, iff) ra mem rx conj ra nmem ry #justify(<and.elim>,imp) ra mem rx. $
++ First, assume $rx inter ry = emptyset$. From #lk(<set.difference.subset>)[the previous] and #lk(<subset.antisymm>)[antisymmetry], we only have to show $rx subset rx without ry$. So let $dv(a) mem rx$ and assume $ra mem ry$. Then $ra mem rx inter ry$#justifyt(<set.inter.mem-iff>), #n[contradiction]. Hence $ra nmem ry$ and $ra mem rx without ry$.
+ 
+ Now assume $rx without ry = rx$ and $ra mem rx inter ry$. Then#justifyt(<set.inter.subset>) $ra mem rx = rx without ry$, hence#justifyt(<set.difference>) $ra nmem ry$, which is in #n[contradiction] to $ra mem rx inter ry$#justifyt(<set.inter.subset>).
++ Assume $rx subset ry$, $dv(a) mem rx without rz$. Then#justifyt(<set.difference>) $ra mem rx, ra nmem rz$, hence $ra mem ry, ra nmem rz$ so $ra mem ry without rz$#justifyt(<set.difference>).
++ Assume $rx subset ry$, $dv(a) mem rz without ry$. Then $ra mem rz, ra nmem ry$#justifyt(<set.difference>). From $rx subset ry$ we have $ra nmem rx$#justifyt(<imp.converse>), hence $ra mem rz without rx$#justifyt(<set.difference>).
++ $ dv(a) mem rx without (ry union rz) &#justify(<set.difference>, iff)#justifyt(<set.union.mem-iff>) ra mem rx conj neg (ra mem ry disj ra mem rz) \
+  & #justify(<not.or>, iff) ra mem rx conj ra nmem ry conj ra nmem rz \ &
+  #justify(<and.self>, iff) (ra mem rx conj ra nmem ry) conj (ra mem rx conj ra nmem rz)
+  \ & #justify(<set.difference>, iff)#justifyt(<set.inter.mem-iff>) ra mem (rx without ry) inter (rx without rz) $
+  and 
+  $ ra mem rx conj ra nmem ry conj ra nmem rz &iff (ra mem rx conj ra nmem ry) conj ra nmem rz \&#justify(<set.difference>,iff) ra mem rx without ry conj ra nmem rz
+  \ &#justify(<set.difference>,iff) ra mem (rx without ry) without rz. $
+  Now (as well as in the forthcoming proofs) use #n[extensionality].
++ $ dv(a) mem rx without (ry inter rz) &#justify(<set.difference>, iff)#justifyt(<set.inter.mem-iff>) ra mem rx conj neg (ra mem ry conj ra mem rz) \
+  & #justify(<not.and>, iff) ra mem rx conj (ra nmem ry disj ra nmem rz)
+  \ &#justify(<and.or-distr>, iff) (ra mem rx conj ra nmem ry) disj (ra mem rx conj ra nmem rz)
+     \ & #justify(<set.difference>, iff)#justifyt(<set.union.mem-iff>) ra mem (rx without ry) union (rx without rz). $
++ $ dv(a) mem (rx union ry) without rz &#justify(<set.difference>, iff)#justifyt(<set.union.mem-iff>) (ra mem rx disj ra mem ry) conj ra nmem rz
+\ &#justify(<and.or-distr>, iff) (ra mem rx conj ra nmem rz) disj (ra mem ry conj ra nmem rz) \ &#justify(<set.difference>, iff)#justifyt(<set.union.mem-iff>) ra mem (rx without rz) union (ry without rz). $
++ $ dv(a) mem (rx inter ry) without rz &#justify(<set.difference>, iff)#justifyt(<set.inter.mem-iff>) (ra mem rx conj ra mem ry) conj ra nmem rz
+\ &#justify(<and.self>, iff) (ra mem rx conj ra nmem rz) conj (ra mem ry conj ra nmem rz) \ &#justify(<set.difference>, iff)#justifyt(<set.inter.mem-iff>) ra mem (rx without rz) conj (ry without rz). $
++ $ dv(a) mem rx without (ry without rx) &#justify(<set.difference>, iff) ra mem rx conj neg (ra mem ry conj neg ra mem rx)
+\ &#justify(<not.and>, iff)#justifyt(<not.not-iff>) ra mem rx conj (neg ra mem ry disj ra mem rx)\ 
+&#justify(<and.or-absorb>, iff) ra mem rx.
+$
++ $ dv(a) mem rx inter (ry without rz) &#justify(<set.difference>, iff)#justifyt(<set.inter.mem-iff>) ra mem rx conj ra mem ry conj ra nmem rz
+\ &#justify(<and.or-absorb>, iff) (ra mem rx conj ra mem ry) conj (ra nmem rx disj ra nmem rz)
+\ &#justify(<not.and>, iff)#justifyt(<set.inter.mem-iff>) (ra mem rx conj ra mem ry) conj ra nmem (rx inter rz)
+\ &#justify(<set.difference>, iff)#justifyt(<set.inter.mem-iff>)
+ra mem (rx inter ry) without (rx inter rz)
+$
+  and 
+  $ ra mem rx conj ra mem ry conj ra nmem rz &#justify(<set.inter.mem-iff>, iff) ra mem (rx inter ry) conj ra nmem rz \ &#justify(<set.difference>, iff) ra mem ((rx inter ry) without rz). $
++ $ dv(a) mem rx union (ry without rz) &#justify(<set.difference>, iff)#justifyt(<set.union.mem-iff>) ra mem rx disj (ra mem ry conj ra nmem rz) 
+\ &#justify(<or.and-distr>, iff) (ra mem rx disj ra mem ry) conj (ra mem rx disj ra nmem rz)
+\ &#justify(<set.union.mem-iff>, iff)#justifyt(<not.and>) (ra mem rx union ry) conj neg (ra nmem rx conj ra mem rz)
+\ &#justify(<set.difference>, iff) ra mem rx union ry conj ra nmem rz without rx
+\ &#justify(<set.difference>, iff) ra mem (rx union ry) without (rz without rx)
+ $
+ For the second equation, we show that the #n[sets] are #n[subsets] of each other:
+  + Left-to-right follows#justifyt(<set.difference.anti>) from $ry inter rz subset rz$#justifyt(<set.inter.subset>)#justifyt(<set.difference.mono>).
+  + Now let $dv(a) mem (rx union ry) without ((ry inter rz) without rx)$, that is#justifyt(<set.inter.mem-iff>) #justifyt(<set.union.mem-iff>)#justifyt(<set.difference>) $ra mem rx$ or $ra mem ry$ as well as $ra nmem ry or ra nmem rz$ or $ra mem rx$.
+    + If $ra mem rx$, we must have $ra nmem rz without rx$#justifyt(<set.difference>) and $ra mem rx union ry$#justifyt(<set.union.mem-iff>), hence $ra mem (rx union ry) without (rz without rx)$#justifyt(<set.difference>).
+    + If $ra mem ry$, we must have $ra nmem rz$ or $ra mem rx$. In the latter case, the same applies. In the former, we have $ra mem rx union ry$#justifyt(<set.union.mem-iff>) and $ra nmem rz$ so $ra mem (rx union ry) without (rz without rx)$#justifyt(<set.difference.subset>).
++ $ dv(a) mem (rx without ry) union (rx inter ry) & #justify(<set.difference>,iff)#justifyt(<set.inter.mem-iff>)#justifyt(<set.union.mem-iff>) (ra mem rx conj ra nmem ry) disj (ra mem rx conj ra mem ry)
+ \ &#justify(<and.or-distr>, iff) ra mem rx conj (ra mem ry disj ra nmem ry) \ &#justify(<excluded-middle>, iff) ra mem rx $
+ and 
+ $ dv(a) mem (rx without ry) inter (rx inter ry) & #justify(<set.difference>,iff)#justifyt(<set.inter.mem-iff>) (ra mem rx conj ra nmem ry) conj (ra mem rx conj ra mem ry)
+ \ &#justify(<and.self>, iff) ra mem rx conj ra mem ry conj ra nmem ry \ &#justify(<and.absurd>, iff)#justifyt(<set.empty.nmem>) ra mem emptyset. $
+
+]

@@ -4,6 +4,20 @@
 #import "@preview/quick-maths:0.2.1": shorthands
 #set text(lang: "en")
 #show: show-theorion
+#import "@preview/ilm:1.4.1": *
+
+#set text(lang: "en")
+
+#show: ilm.with(
+  title: [Mathematics],
+  author: "Uni",
+  external-link-circle: false,
+  bibliography: bibliography("notes/bib.yml"),
+  figure-index: (enabled: true),
+  table-index: (enabled: true),
+  listing-index: (enabled: true)
+)
+
 /*
 #definition(title: "Injectivity")[
   A function $dv(f) : dv(A) -> dv(B)$ is called #def(<inj>)[injective], if, for all $dv(a), dv(a') in rv(A)$, 
@@ -25,4 +39,3 @@
 = Foundations
 #include "notes/001logic.typ"
 #include "notes/002sets.typ"
-#bibliography("notes/bib.yml")
