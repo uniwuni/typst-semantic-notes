@@ -574,8 +574,19 @@ $
   $dv(f)(dv(x))(dv(y)) defun dots$ for defining a #n[function] $fn(rf,dv(A),dv(B))$, where every #n[element] of $rB$ is itself a #n[function],
   writing $dv(f)(dv(x),dv(y)) defun dots$ for #n[functions] $fn(rf,dv(A) times dv(B),dv(C))$ (where we also use the shortcut $rf(rx,ry) defeq rf(pair(rx,ry))$), and writing $dv(f)_dv(i)$ instead of $rf(ri)$ both when #lk(<func.def>)[defining] and #lk(<func.value>)[evaluating] #n[functions].
 
-  The last case is usually referred to as _index notation_ and used to signify that the #n[domain] of $rf$ has a more discrete nature than usually where the #n[map] is more used to enumerate objects than it is explicitly viewed as an object in its own right.
+  The last case is usually referred to as _index notation_ and used to signify that the #n[domain] of $rf$ has a more discrete nature than for orhter #n[maps] and the #n[map] is more used to enumerate objects than it is explicitly viewed as an object in its own right.
 ]
+#let im(f,A) = $#f #link(<func.image>,$($) #A #link(<func.image>,$)$)$
+#let preim(f,A) = $#f^#link(<func.preimage>, $-1$) (A)$
+
+#definition(title: "Image and preimage")[
+  Let $fn(dv(f),dv(A),dv(B))$, $dv(X) subset rA, dv(Y) subset rB$. Then define #def(<func.image>)[the image of $rX$ under $rf$] as 
+  $ im(rf,rX) defeq compr(y,rB, bexists(x,rX) rf(rx) = ry) $
+  and #def(<func.preimage>)[the preimage of $rY$ under $rf$] as 
+  $ preim(rf, rY) defeq compr(x,rA, rf(rx) mem rY). $
+
+]
+
 === Axioms we do not really need right now but write down to not forget about them later
 #axiom(title: [Axiom scheme of replacement])[
   Let $dv(P)(x,y)$ be a #n[proposition] such that #n[for all] #n[sets] $dv(x), dv(y), dv(z)$ we have $rP(rx,ry) conj rP(rx,rz) imp ry = rz$.
