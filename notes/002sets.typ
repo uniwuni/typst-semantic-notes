@@ -56,7 +56,16 @@ Lots of constructions that go through with #n[sets] also work with #n[classes], 
   Now again by assumption#justifytas(1,3), this also means we have $das(4,rr mem rr)$, #n[contradiction] #justifytas(3,4).
 
   So such a #n[set] cannot #n[exist] even intutitionistically.
+]<russell-paradox1>
+
+#let bforall(x, a) = $#lk(<set.all>, math.forall) dv(#x) mem #a.$
+#let bexists(x, a) = $#lk(<set.exists>, math.exists) dv(#x) mem #a.$
+#definition(title: "Bounded quantifiers")[
+  Let $dv(x)$ be a #n[set], $dv(P)(x)$ a #n[proposition]. Then, we define #def(<set.all>)[the bounded universal quantifier] and #def(<set.exists>)[the bounded existential quantifier] via
+  $ bforall(a,x) rP(ra) &defiff forall(a) ra mem rx imp rP(ra), \
+    bexists(a,x) rP(ra) &defiff exists(a) ra mem rx conj rP(ra). $
 ]
+
 === Constructing basic sets
 ==== Pairing
 #axiom(title: "Axiom of pairing")[
@@ -337,7 +346,11 @@ The former we read as "$rx$ is a #def(<subset>)[subset] of $ry$", the latter as 
   + $rx subset ry iff rx union ry = ry$<set.union.eq-iff-subset>,
   + $rx subset ry iff rx inter ry = rx$<set.inter.eq-iff-subset>,
   + $rx subset ry imp setUnion(rx) subset setUnion(ry)$<set.Union.mono>,
-  + $rx subset ry imp setIntersection(ry) subset setIntersection(rx)$<set.Inter.mono> for #n[nonempty] $rx,ry$.
+  + $rx subset ry imp setIntersection(ry) subset setIntersection(rx)$<set.Inter.mono> for #n[nonempty] $rx,ry$,
+  + $(rx union rz) inter ry subset rx union (rz inter ry)$<set.union-inter-subset>,
+  + $rx subset ry iff (forall(z) rx union (rz inter ry) subset (rx union rz) inter ry)$<set.union-inter-modular>,
+  + $rx union ry subset rz iff (rx subset rz conj ry subset rz)$<set.union.subset-iff>,
+  + $rx subset ry inter rz iff (rx subset ry conj rx subset rz)$<set.inter.subset-iff>.
 ]
 #proof[
   + $ dv(a) mem rx &#justify(<or.intro>,imp) ra mem rx disj ra mem ry #justify(<set.union.mem-iff>,iff) ra mem rx union ry, \
@@ -352,7 +365,16 @@ The former we read as "$rx$ is a #def(<subset>)[subset] of $ry$", the latter as 
     From #lk(<set.union.subset>)[a previous statement] and #lk(<subset.antisymm>)[antisymmetry], it suffices to prove $rx union ry subset ry$. But by #lk(<set.union.mono>)[monotony], we have $rx union ry subset ry union ry #justify(<set.union.self>, $=$) ry$. Now assume $rx union ry = ry$. Then, $rx #justify(<set.union.subset>,subset) rx union ry = ry$.
   + First assume $rx subset ry$. From #lk(<set.inter.subset>)[a previous statement] and #lk(<subset.antisymm>)[antisymmetry], it suffices to prove $rx subset rx inter ry$. But by #lk(<set.union.mono>)[monotony], we have $rx inter rx #justify(<set.inter.self>, $=$) rx subset rx inter ry$. Now assume $rx inter ry = ry$. Then $ry = rx inter ry #justify(<set.inter.subset>,subset) rx$.
   + Let $rx subset ry$ and $dv(a) mem setUnion(rx)$, i.e.#justifyt(<set.Union>) $ra mem dv(b) mem rx$. Then $rb mem ry$, hence#justifyt(<set.Union>) $ra mem setUnion(ry)$.
-  + Let $rx subset ry$ and $dv(a) mem setIntersection(ry)$, i.e.#justifyt(<set.Intersection.mem-iff>) $forall(b) rb mem ry imp ra mem rb$. We need to show#justifyt(<set.Intersection.mem-iff>) $forall(b) rb mem rx imp ra mem rb$. But for #n[any] $dv(b)$, $rb mem rx$ #n[implies] $rb mem ry$ such that $ra mem rb$.    
+  + Let $rx subset ry$ and $dv(a) mem setIntersection(ry)$, i.e.#justifyt(<set.Intersection.mem-iff>) $forall(b) rb mem ry imp ra mem rb$. We need to show#justifyt(<set.Intersection.mem-iff>) $forall(b) rb mem rx imp ra mem rb$. But for #n[any] $dv(b)$, $rb mem rx$ #n[implies] $rb mem ry$ such that $ra mem rb$.
+  + $ dv(a) mem (rx union rz) inter ry #justify(<set.inter.union-distr>,subset) (rx inter ry) union (rz inter ry)#justify(<set.union.mono>,subset)#justifyt(<set.inter.subset>) rx union (rz inter ry). $
+  + Assume $rx subset ry$ and let $dv(z)$ be a #n[set]. Then
+    $rx union (rz inter ry) #justify(<set.union.inter-distr>,subset) (rx union rz) inter (rx union ry) #justify(<set.union.eq-iff-subset>, $=$) (rx union rz) inter ry$.
+    Now let $rx union (dv(z) inter ry) subset (rx union rz) inter ry$ hold #n[for all] $rz$. Choose $rz = rx$, then 
+    $ rx #justify(<set.union.inter-absorb>, $=$) rx union (rx inter ry) subset (rx union rx) inter ry #justify(<set.union.self>, $=$) rx inter ry. $
+    Hence#justifyt(<subset.trans>)#justifyt(<set.inter.subset>) we must have $rx subset ry$.
+  + If $rx union ry subset rz$, then $rx #justify(<set.union.subset>,subset) rx union ry subset rz, ry #justify(<set.union.subset>,subset) rx union ry subset rz$. 
+    If $rx subset rz, ry subset rz$ and $dv(a) mem rx union ry$, the case $ra mem rx$ implies $ra mem rz$ by assumption, and so does $ra mem ry$.
+  + If $rx subset ry inter rz$, we have $rx subset ry inter rz #justify(<set.inter.subset>, subset) ry$, $rx subset ry inter rz #justify(<set.inter.subset>, subset) rz$. Now assume $rx subset ry, rx subset rz$. Then any #n[element] $dv(a)$ of $rx$ must be in $ry$ and also in $rz$, hence in $ry inter rz$ as was needed.
 ]
 ==== Set differences
 #let without = link(<set.difference>,$without$)
@@ -377,7 +399,7 @@ The former we read as "$rx$ is a #def(<subset>)[subset] of $ry$", the latter as 
   + $rx without (ry without rx) = rx$<set.difference.difference>,
   + $rx inter (ry without rz) = (rx inter ry) without (rx inter rz) = (rx inter ry) without rz$<set.inter.difference>,
   + $rx union (ry without rz) = (rx union ry) without (rz without rx) = (rx union ry) without ((ry inter rz) without rx)$<set.union.difference>,
-  + $(rx without ry) union (rx inter ry) = rx, (rx without ry) inter (rx inter ry) = emptyset$<set.difference.disjoint-decomp>]
+  + $(rx without ry) union (rx inter ry) = rx, (rx without ry) inter (rx inter ry) = emptyset$<set.difference.disjoint-decomp>.]
 #proof[
   + If $rx without ry = emptyset$, we have#justifyt(<set.difference>) $neg(dv(a) mem rx conj ra nmem ry)$. Hence $ra mem rx imp ra mem ry$.
    Similarly, #n[if] $rx subset ry$ and $dv(a) mem rx without ry$, we have#justifyt(<set.difference>) $ra mem rx, ra nmem ry$, but by assumption#justifyt(<subset>) $ra mem ry$, #n[contradiction].
@@ -435,4 +457,133 @@ $
  $ dv(a) mem (rx without ry) inter (rx inter ry) & #justify(<set.difference>,iff)#justifyt(<set.inter.mem-iff>) (ra mem rx conj ra nmem ry) conj (ra mem rx conj ra mem ry)
  \ &#justify(<and.self>, iff) ra mem rx conj ra mem ry conj ra nmem ry \ &#justify(<and.absurd>, iff)#justifyt(<set.empty.nmem>) ra mem emptyset. $
 
+]
+==== Powersets
+#axiom(title: "Power set axiom")[
+  #n[For any] #n[set] $dv(x)$, there #n[exists] a #n[set] $dv(y)$ such that $dv(a) mem ry iff ra subset rx$.
+]<set.ax-powerset>
+#let powerset = link(<set.powerset>,$cal(P)$)
+#definition(title: "Power set")[
+  Let $dv(x)$ be a #n[set]. Then, its #def(<set.powerset>)[powerset] $powerset(rx)$ is defined as the#justifyt(<set.ax-powerset>) unique#justifyt(<set.ext>) #n[set] with $dv(a) mem powerset(rx) iff ra subset rx$ #n[for all] $ra$.
+]
+#names(<set.powerset>, plural: true, "powerset", "power set")
+#proposition(title: "Basic power set properties")[
+  Let $dv(x), dv(y)$ be #n[sets]. Then we have the following:
+  + $rx mem powerset(rx)$<set.powerset.same-mem>,
+  + $emptyset mem powerset(rx)$<set.powerset.empty-mem>,
+  + $rx subset ry iff powerset(rx) subset powerset(ry)$<set.powerset.mono>,
+  + $rx = ry iff powerset(rx) = powerset(ry)$<set.powerset.inj>,
+  + $powerset(rx inter ry) = powerset(rx) inter powerset(ry)$<set.powerset.inter>,
+  + $powerset(rx) union powerset(ry) subset powerset(rx union ry)$<set.powerset.union-subset>,
+  + $setUnion(powerset(rx)) = rx$<set.Union.powerset>, 
+  + another form of #lk(<russell-paradox1>)[Russell's paradox]: $not powerset(rx) subset rx$<set.powerset.not-subset-self>.
+]
+#proof[
+  + Due to $rx subset rx$#justifyt(<subset.refl>)#justifyt(<set.powerset>).
+  + Due to $emptyset subset rx$#justifyt(<set.empty.subset>)#justifyt(<set.powerset>).
+  + If $rx subset ry$ and $dv(a) mem powerset(rx) iff ra subset rx$, then#justifyt(<subset.trans>) $ra subset ry$, hence $ra mem powerset(ry)$ such that $powerset(rx) subset powerset(ry)$.
+    Now let $powerset(rx) subset powerset(ry)$. Then#justifyt(<set.powerset.same-mem>) $rx mem powerset(rx) subset powerset(ry)$ such that $rx subset ry$#justifyt(<set.powerset>).
+  + Follows from #lk(<set.powerset.mono>)[the above] and #lk(<subset.antisymm>)[antisymmetry].
+  + Since $rx inter ry subset rx$#justifyt(<set.inter.subset>) we have $powerset(rx inter ry) subset powerset(rx)$#justifyt(<set.powerset.mono>) and similarly for $ry$, such that#justifyt(<set.inter.subset-iff>) $powerset(rx inter ry) subset powerset(rx) inter powerset(ry)$. Now let $dv(a) mem powerset(rx) inter powerset(ry)$. Then $ra subset rx, ra subset ry$ such that#justifyt(<set.inter.subset-iff>) $ra subset rx inter ry$ and $ra mem powerset(rx inter ry)$. By #lk(<subset.antisymm>)[antisymmetry], the #n[sets] must be #n[equal].
+  + From $rx subset rx union ry$, $ry subset rx union ry$#justifyt(<set.union.subset>) we have#justifyt(<set.powerset.mono>)
+    $powerset(rx) subset powerset(rx union ry)$, $powerset(ry) subset powerset(rx union ry)$, hence#justifyt(<set.union.subset-iff>)
+    $powerset(rx) union powerset(ry) subset powerset(rx union ry)$.
+  + Use #n[extensionality]: If $dv(a) mem setUnion(powerset(rx))$, that means#justifyt(<set.Union>) there is a $dv(b) mem powerset(rx)$ with $ra mem rb$. So due to $rb subset rx, ra mem rb$ we have $ra mem rx$.
+    If $dv(a) mem rx$, it follows that $ra mem rx mem powerset(rx)$#justifyt(<set.powerset.same-mem>) such that#justifyt(<set.Union>) $dv(a) mem setUnion(powerset(rx))$. Hence $setUnion(powerset(rx)) = rx$.
+  + Assume $powerset(rx) subset rx$. Then, the #n[set] $dv(b) defeq compr(a, rx, ra nmem ra) subset rx$ would be an #n[element] of $rx$.
+    Now if $rb mem rb$, by its own definition it would fulfill $rb nmem rb$, and if $rb nmem rb$, we would have $rb mem rb$. #n[Contradiction].
+]
+==== Cartesian products
+#let times = $#link(<set.prod>,$times$)$
+
+#definition(title: "Product of two sets")[
+  Let $dv(x), dv(y)$ be #n[sets]. Then we define their #def(<set.prod>)[cartesian product] via
+  $ dv(a) mem rx times ry defiff bexists(p, rx) bexists(q,ry) ra = pair(rp, rq). $
+]
+#names(<set.prod>, plural: true, "cartesian product", "set product")
+#names(<set.prod>, "product of two sets")
+#proof(title: "Justification")[
+  If it #n[exists], $rx times ry$ is unique by #n[extensionality]. To show its #n[existence], we show it is contained in some #n[set].
+  We have $pair(rp, rq) = upair(singleton(rp), upair(rp,rq))$#justifyt(<pair>). Both $singleton(rp), upair(rp,rq)$ are #n[subsets] of $rx union ry$, hence#justifyt(<set.powerset>) #n[elements] of $powerset(rx union ry)$. So $upair(singleton(rp), upair(rp,rq)) subset powerset(rx union ry)$, hence is an #n[element] of $powerset(powerset(rx union ry))$. So $ rx times ry defeq compr(a, powerset(powerset(rx union ry)), bexists(p, rx) bexists(q,ry) ra = pair(rp, rq)). $
+]
+#remark(title: "Implicit definitions")[
+  In #lk(<set.prod>)[this definition], we implicitly defined the #n[product of two sets] by stating the desired property and then proving unique existence. We will often make use of this when the construction is very much secondary to a defining property of the object.
+]
+#proposition(title: "Basic facts about the cartesian product")[
+  Let $dv(x), dv(y), dv(z), dv(a), dv(b)$ be #n[sets]. Then the following hold:
+  + $pair(ra,rb) mem rx times ry iff (ra mem rx conj rb mem ry)$<set.prod.mem-iff> such that, since #n[every] #n[element] of $rx times ry$ is a #n[pair], we can reduce hypotheses of the form "Let $dv(c) mem rx times ry$" to "Let $dv(p) mem rx, dv(q) mem ry$" in writing.
+  + $rx times ry = emptyset iff (rx = emptyset disj ry = emptyset)$<set.prod.empty-iff>,
+  + $singleton(ra) times singleton(rb) = singleton(pair(ra,rb))$<set.prod.singletons>,
+  + $rx subset ry imp rx times rz subset ry times rz$<set.prod.mono>,
+  + for #n[nonempty] $rx,ry$, $rx times ry subset ra times rb iff (rx subset ra conj ry subset rb)$<set.prod.subset-iff>
+  + $(rx union ry) times rz = rx times rz union ry times rz$<set.prod.union>,
+  + $(rx inter ry) times rz = rx times rz inter ry times rz$<set.prod.inter>,
+  + $(rx without ry) times rz = rx times rz without ry times rz$<set.prod.difference>,
+  and analogues of the above with the right factor of the #n[set product] modified.
+]
+#proof[
+  + We have $pair(ra,rb) mem rx times ry defiff bexists(p, rx) bexists(q,ry) pair(ra,rb) = pair(rp, rq)$. Now if $ra mem rx, rb mem ry$, we can clearly choose $rp = ra, rq = rb$ and this holds. For the other direction, consider $pair(ra,rb) mem rx times ry$, i.e. there are some $dv(p) mem rx, dv(q) mem ry, pair(ra,rb) = pair(rp,rq)$. Then #justifyt(<pair.eq-pair>) $ra = rp, rb = rq$ such that $ra mem rx, rb mem ry$.
+  + Assume $rx = emptyset$. Then any #n[element] of $rx times ry$ would be a #n[pair] $pair(dv(p), dv(q)), rp mem rx = emptyset, rq mem ry$. But this is not possible#justifyt(<set.empty.nmem>). Hence#justifyt(<set.empty.iff>) $rx times ry = emptyset$. Similarly for $ry = emptyset$. Now assume $rx, ry$ are both #n[nonempty] such that#justifyt(<set.nonempty-iff>) there are some $dv(a) mem rx, dv(b) mem ry$. Then#justifyt(<set.prod.mem-iff>) $pair(ra,rb) mem rx times ry$ and it is #n[nonempty]#justifyt(<set.nonempty-iff>).
+  + We have $ pair(dv(p),dv(q)) mem singleton(ra) times singleton(rb) &#justify(<set.prod.mem-iff>,iff) rp mem singleton(ra) conj rq mem singleton(rb) \ &#justify(<set.singleton.mem-iff>, iff) rp = ra conj rq = rb \ & #justify(<pair.eq-pair>, iff)#justifyt(<set.singleton.mem-iff>) pair(rp,rq) mem singleton(pair(ra,rb)). $
+  + Let $rx subset ry$, $pair(dv(p), dv(q)) mem rx times rz$. Then $rp mem rx subset ry, rq mem rz$ such that $pair(rp,rq) mem ry times rz$.
+  + Right-to-left follows from #lk(<set.prod.mono>)[above]. Assume $rx times ry subset ra times rb$, $dv(c) mem rx$. Due to $ry$ being #n[nonempty], we can choose a $dv(d) mem ry$, hence $pair(rc,rd) mem rx times ry subset ra times rb$ and $rc mem ra$. Similar reasoning can then be applied for $ry subset rb$.
+  + $ pair(dv(p),dv(q)) mem (rx union ry) times rz &#justify(<set.prod.mem-iff>,iff)#justifyt(<set.union.mem-iff>) (rp mem rx disj rp mem ry) conj rq mem rz \ & #justify(<and.or-distr>, iff) (rp mem rx conj rq mem rz) disj (rp mem ry conj rq mem rz)\ &  #justify(<set.prod.mem-iff>,iff)#justifyt(<set.union.mem-iff>) pair(rp,rq) mem (rx times rz) union (ry times rz). $
+  + $ pair(dv(p),dv(q)) mem (rx inter ry) times rz &#justify(<set.prod.mem-iff>,iff)#justifyt(<set.inter.mem-iff>) (rp mem rx conj rp mem ry) conj rq mem rz \ & #justify(<and.self>, iff) (rp mem rx conj rq mem rz) conj (rp mem ry conj rq mem rz)\ &  #justify(<set.prod.mem-iff>,iff)#justifyt(<set.inter.mem-iff>) pair(rp,rq) mem (rx times rz) inter (ry times rz). $
+  + $ pair(dv(p),dv(q)) mem (rx without ry) times rz &#justify(<set.prod.mem-iff>,iff)#justifyt(<set.difference>) rp mem rx conj rp nmem ry conj rq mem rz \ & #justify(<and.or-absorb>, iff) rp mem rx conj rq mem rz conj (rp nmem ry disj rq nmem rz) 
+    \ & #justify(<set.prod.mem-iff>, iff)#justifyt(<not.and>) pair(rp,rq) mem rx times rz conj neg (rp mem ry conj rq mem rz)
+    \ & #justify(<set.prod.mem-iff>, iff)#justifyt(<set.difference>) pair(rp,rq) mem rx times rz without ry times rz.$  
+]
+=== Relations and functions
+#definition(title: "Relation")[
+  A #def(<relation>)[relation] between two #n[sets] $dv(x), dv(y)$ is a #n[set] $dv(R)$ such that $rR subset rx times ry$.
+]
+#names(<relation>, plural: true, "relation")
+#example[
+  #n[For any] #n[sets] $dv(x),dv(y)$, both $emptyset$ and $rx times ry$ are #n[relations] beween $rx$ and $ry$.#justifyt(<subset.refl>)#justifyt(<set.empty.subset>)
+]
+#let fn(f,A,B) = $#f : #A #link(<func>, $->$) #B$
+#definition(title: "Function")[ 
+  A #def(<func>)[function] between two #n[sets] $dv(x), dv(y)$ is a #n[relation] $dv(F)$ between $rx,ry$ that fulfills the following property:
+  #n[For any] $dv(a) mem rx$, there #lk(<exists1>)[is a unique] $dv(b) mem ry$ with $pair(ra,rb) mem rF$. We write $fn(rF,rx,ry)$. In this case, $rx$ is called the #def(<func.domain>)[domain] and $ry$ the #def(<func.codomain>)[codomain] of $rF$.
+]
+#names(<func>, plural: true, "function", "map")
+#names(<func.domain>, plural: true, "domain", "is defined on", "index set")
+#names(<func.codomain>, plural: true, "codomain")
+#definition(title: "Value of a function")[
+  Let $fn(dv(f), dv(A),dv(B))$ be a #n[function] and $dv(x) mem rA$. Then we define #def(<func.value>)[the value] of $rf$ at $rx$ as the #lk(<exists1>)[unique] $dv(y)$
+  with $pair(rx,ry) mem rf$#justifyt(<func>).
+]
+#names(<func.value>, "values", "value", "evaluate")
+#let defun = link(<func.def>, $:=$)
+#definition(title: "Defining functions from terms")[
+  Let $dv(t)(x)$ a #n[term] that contains a variable. If for $dv(x) mem dv(A)$, we have $rt(x) mem dv(B)$, we can use $rt$ to #def(<func.def>)[define a #n[function]] $dv(f)$ via $pair(dv(p), dv(q)) mem rf iff (rp mem rA conj rq = rt(rp))$. If we want to denote the defined #n[function] by $dv(f)$, we usually write $rf(dv(x)) defun rt(rx)$.
+]
+#proof(title: "Justification")[
+  This is well-defined due to the condition implying $rf subset rA times rB$:
+  If $dv(x) mem rf$, it must have the form $pair(dv(p), dv(q))$ by definition. Also, $rp mem rA$ and $rq = rt(rp)$. But then $rt(rp) mem rB$ so $pair(dv(p), dv(q)) mem rA times rB$#justifyt(<set.prod.mem-iff>).
+  And indeed the defined $rf$ is a #n[function], since $pair(dv(p), rt(rp))$ is an #n[element] for all $rp$.
+]
+#lemma(title: "Value of functions defined from terms")[
+  Let $dv(t)(x)$ be a #n[term] that contains a variable such that $fn(dv(f),dv(A),dv(B)), rf(dv(x)) defun rt(rx)$ yields a well-defined #n[function]. Then #n[for any] $dv(x) mem rA$ we have $rf(rx) = rt(rx)$, as the notation suggests.
+]
+#proof[
+  Let $rx mem rA$. We need to show#justifyt(<func.value>) that $pair(rx, rt(rx)) mem rf$. This is true #n[iff] $rx mem rA conj rt(rx) = rt(rx)$#justifyt(<func.def>), which is true by assumption.
+]
+#remark(title: "Defining functions")[
+  Sometimes, we variate the syntax #lk(<func.def>)[defining] #n[functions]. The most typical cases include writing
+  $dv(f)(dv(x))(dv(y)) defun dots$ for defining a #n[function] $fn(rf,dv(A),dv(B))$, where every #n[element] of $rB$ is itself a #n[function],
+  writing $dv(f)(dv(x),dv(y)) defun dots$ for #n[functions] $fn(rf,dv(A) times dv(B),dv(C))$ (where we also use the shortcut $rf(rx,ry) defeq rf(pair(rx,ry))$), and writing $dv(f)_dv(i)$ instead of $rf(ri)$ both when #lk(<func.def>)[defining] and #lk(<func.value>)[evaluating] #n[functions].
+
+  The last case is usually referred to as _index notation_ and used to signify that the #n[domain] of $rf$ has a more discrete nature than usually where the #n[map] is more used to enumerate objects than it is explicitly viewed as an object in its own right.
+]
+=== Axioms we do not really need right now but write down to not forget about them later
+#axiom(title: [Axiom scheme of replacement])[
+  Let $dv(P)(x,y)$ be a #n[proposition] such that #n[for all] #n[sets] $dv(x), dv(y), dv(z)$ we have $rP(rx,ry) conj rP(rx,rz) imp ry = rz$.
+  Then #n[for any] #n[set] $dv(a)$, the #n[class] $classcompr(b, exists(c) rc mem ra conj rP(rc,rb))$ is a #n[set].
+]<set.ax-replacement>
+#axiom(title: [Axiom of regularity])[
+  #n[For any] #n[nonempty] #n[set] $dv(a)$, there #n[exists] an $dv(x) mem ra$ such that $rx inter ra = emptyset$.
+]
+#axiom(title: [Axiom of choice])[
+  Let $dv(x)$ be a #n[set] such that every $dv(y) mem rx$ is #n[nonempty] and for $dv(y) neq dv(y') mem rx$ we have $ry inter rv(y') = emptyset$. Then, there is a #n[set] $dv(z)$ such that for each $dv(y) mem rx$, $ry inter rz = singleton(dv(a))$ for some $ra$.
 ]
