@@ -158,7 +158,7 @@ Lots of constructions that go through with #n[sets] also work with #n[classes], 
 #definition(title: "Union of two sets")[
   For #n[all] #n[sets] $dv(x), dv(y)$, define the #n[set] we call their #def(<set.union>)[union] (or _binary union_) as $ rx union ry defeq setUnion(upair(rx,ry)). $
 ]
-#names(<set.union>, "binary union", "union")
+#names(<set.union>, plural: true, "binary union", "union")
 #proposition(title: [Membership in a binary union])[
   Let $dv(x), dv(y), dv(a)$ be #n[sets]. Then $ ra mem rx union ry iff (ra mem rx disj ra mem ry). $
 ]<set.union.mem-iff>
@@ -533,14 +533,64 @@ $
     \ & #justify(<set.prod.mem-iff>, iff)#justifyt(<not.and>) pair(rp,rq) mem rx times rz conj neg (rp mem ry conj rq mem rz)
     \ & #justify(<set.prod.mem-iff>, iff)#justifyt(<set.difference>) pair(rp,rq) mem rx times rz without ry times rz.$  
 ]
+=== Replacement
+#axiom(title: [Axiom scheme of replacement])[
+  Let $dv(P)(x,y)$ be a #n[proposition] such that #n[for all] #n[sets] $dv(x), dv(y), dv(z)$ we have $rP(rx,ry) conj rP(rx,rz) imp ry = rz$.
+  Then #n[for any] #n[set] $dv(a)$, the #n[class] $classcompr(b, exists(c) rc mem ra conj rP(rc,rb))$ is a #n[set].
+]<set.ax-replacement>
+#let fcompr1(x,P) = ${#x #link(<set.map-separation>,$mid(|)$) #P}$
+#definition(title: "Replacing separation")[
+  Let $dv(t)(x)$ be a #n[term], $dv(y)$ be a #n[set] and $dv(P)(x)$ a #n[proposition]. Then we define the #def(<set.map-separation>)[set obtained from separating $rP$ in $ry$ and replacing with $rt(x)$] via
+  $ dv(a) mem fcompr1(rt(dv(x)),rx mem ry conj rP(rx)) iff exists(dv(b)) ra = rt(rb) conj rb mem ry conj rP(rb). $
+]
+#proof(title:"Justification")[
+  Exists due to #lk(<set.ax-replacement>)[replacement].
+]
 === Relations and functions
 #definition(title: "Relation")[
-  A #def(<relation>)[relation] between two #n[sets] $dv(x), dv(y)$ is a #n[set] $dv(R)$ such that $rR subset rx times ry$.
+  A #def(<relation>)[relation] between two #n[sets] $dv(x), dv(y)$ (#def(<relation.source>)[source] and #def(<relation.target>)[target]) is a #n[set] $dv(R)$ such that $rR subset rx times ry$.
 ]
 #names(<relation>, plural: true, "relation")
+#proposition[
+  Let $dv(R), dv(S)$ be #n[relations] between $dv(x), dv(y)$. Then so is any #n[subset] of $rR$ as well as $rR union rS$.
+]
+#proof[
+  The first statement follows from #lk(<subset.trans>)[transitivity], the second from the #lk(<set.union.subset>)[behavior of] #n[unions] and #n[subsets].
+]
+#definition(title: "Domain and range of a relation")[
+  Let $dv(R)$ be a #n[relation] between $dv(x), dv(y)$. Then, the #def(<relation.domain>)[domain] of $rR$ is defined as 
+  $compr(a,rx,exists(b) pair(ra,rb) mem R)$ while its #def(<relation.range>)[range] is defined as
+  $compr(b,ry,exists(a) pair(ra,rb) mem R)$.
+]
 #example[
   #n[For any] #n[sets] $dv(x),dv(y)$, both $emptyset$ and $rx times ry$ are #n[relations] beween $rx$ and $ry$.#justifyt(<subset.refl>)#justifyt(<set.empty.subset>)
 ]
+#let relim(f,A) = $#f #link(<relation.image>,$($) #A #link(<relation.image>,$)$)$
+#definition(title: "Image of a set under a relation")[
+  Let $dv(R)$ be a #n[relation] between $dv(x), dv(y)$ and $dv(w) subset dv(x)$. Then the #def(<relation.image>)[image of $rw$ under $rR$]
+  is defined as 
+  $ relim(rR,rw) defeq compr(a,ry,bexists(b,rw) pair(rb,ra) mem rR). $
+]
+#proposition(title: "Basic properties of images of relations")[
+  Let $dv(R), dv(S)$ be #n[relations] between $dv(x), dv(y)$, $dv(v), dv(w) subset rx$. Then the following hold:
+  + $relim(rR,emptyset) = emptyset = relim(emptyset, rv(v))$<relation.image.empty>,
+  + $relim((rx times ry), rv(v)) = ry$ #n[iff] $rv(v)$ is #n[nonempty]<relation.image.prod-nonempty>,
+  + $relim(rR, rw)$ is a #n[subset] of the #lk(<relation.range>)[range] of $rR$<relation.image.subset-range>,
+  + if $rw$ is a #n[nonempty] #n[subset] of the #lk(<relation.domain>)[domain] of $rR$, $relim(rR,rw)$ is #n[nonempty]<relation.image.nonempty-of-subset-domain>,
+  + $relim(rR, rx) = relim(rR, #lk(<relation.domain>)[domain of] rR)$ is equal to the #lk(<relation.range>)[range] of $rR$<relation.image.domain>,
+  + for $rR subset rS$, $relim(rR,rw) subset relim(rS, rw)$<relation.image.mono-rel>,
+  + for $rv(v) subset rw$, $relim(rR,rv(v)) subset relim(rR,rw)$<relation.image.mono>,
+  + $relim(rR union rS, rw) = relim(rR,rw) union relim(rS,rw)$<relation.image.union-rel>,
+  + $relim(rR, rv(v) union rw) = relim(rR, rv) union relim(rR, rw)$<relation.image.union>,
+  + $relim(rR inter rS, rw) = relim(rR,rw) inter relim(rS,rw)$<relation.image.inter-rel>,
+  + $relim(rR, rv(v) inter rw) subset relim(rR, rv(v)) inter relim(rR, rw)$<relation.image.inter-subset>.
+]
+#proof[
+  + $ dv(a) mem relim(rR,emptyset) iff bexists(b,emptyset) pair(rb,ra) mem rR #justify(<set.empty.nmem>,iff) fls, $
+    $ dv(a) mem relim(emptyset, rv(v)) iff bexists(b,rv(v)) pair(rb,ra) mem emptyset #justify(<set.empty.nmem>,iff) fls. $
+  + If $rv(v)$ is #n[empty], this follows from #lk(<relation.image.empty>)[the previous statement]. If it is #n[nonempty], note that it has an #n[element] in common with $rx$. Then $dv(a) mem relim((rx times ry), rv(v)) iff bexists(b, rv(v)) pair(rb,ra) mem rx times ry$. But $pair(rb,ra) mem rx times ry$ for any $ra mem ry, rb mem rv(V)$.
+].
+==== Functions
 #let fn(f,A,B) = $#f : #A #link(<func>, $->$) #B$
 #definition(title: "Function")[ 
   A #def(<func>)[function] between two #n[sets] $dv(x), dv(y)$ is a #n[relation] $dv(F)$ between $rx,ry$ that fulfills the following property:
@@ -576,6 +626,10 @@ $
 
   The last case is usually referred to as _index notation_ and used to signify that the #n[domain] of $rf$ has a more discrete nature than for orhter #n[maps] and the #n[map] is more used to enumerate objects than it is explicitly viewed as an object in its own right.
 ]
+
+==== Families of 
+
+
 #let im(f,A) = $#f #link(<func.image>,$($) #A #link(<func.image>,$)$)$
 #let preim(f,A) = $#f^#link(<func.preimage>, $-1$) (A)$
 
@@ -584,14 +638,12 @@ $
   $ im(rf,rX) defeq compr(y,rB, bexists(x,rX) rf(rx) = ry) $
   and #def(<func.preimage>)[the preimage of $rY$ under $rf$] as 
   $ preim(rf, rY) defeq compr(x,rA, rf(rx) mem rY). $
-
 ]
-
+#proposition(title: "Image and preimage - properties")[
+  Let $fn(dv(f),dv(A),dv(B))$, $dv(X), dv subset rA, dv(Y) subset rB$.
+]
 === Axioms we do not really need right now but write down to not forget about them later
-#axiom(title: [Axiom scheme of replacement])[
-  Let $dv(P)(x,y)$ be a #n[proposition] such that #n[for all] #n[sets] $dv(x), dv(y), dv(z)$ we have $rP(rx,ry) conj rP(rx,rz) imp ry = rz$.
-  Then #n[for any] #n[set] $dv(a)$, the #n[class] $classcompr(b, exists(c) rc mem ra conj rP(rc,rb))$ is a #n[set].
-]<set.ax-replacement>
+
 #axiom(title: [Axiom of regularity])[
   #n[For any] #n[nonempty] #n[set] $dv(a)$, there #n[exists] an $dv(x) mem ra$ such that $rx inter ra = emptyset$.
 ]
